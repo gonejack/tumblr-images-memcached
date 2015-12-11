@@ -25,7 +25,7 @@ class Router {
     public static function route($url, $numberOfHost) {
 
         $hashNode    = static::strHash($url, $numberOfHost);
-        $redirectUrl = "http://tumblr-images-$hashNode.appspot.com/fetch.php?url={$url}";
+        $redirectUrl = "http://tumblr-images-$hashNode.appspot.com/main.php?url={$url}";
         $redirectUrl = static::encodeCjkChars($redirectUrl);
 
         Output::redirect($redirectUrl);
