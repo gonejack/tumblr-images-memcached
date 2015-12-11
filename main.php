@@ -18,9 +18,9 @@ main($isHashHost, $hostNumber);
 
 function main($isHashHost, $hostNumber) {
 
-    $url = $_GET['url'];
+    $url = isset($_GET['url']) ? $_GET['url'] : '';
 
-    if (!isset($url)) {
+    if (!$url) {
 
         exit_script('Hello Tumblr!');
 
