@@ -39,7 +39,7 @@ class Input {
     public static function fetchImagesFromCache($urlArray) {
         !static::$mc && (static::$mc = new mc());
 
-        $mc = & static::$mc;
+        $mc = static::$mc;
 
         $fileNameArray = array_map(function ($url) {
             return basename($url);
