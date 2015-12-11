@@ -29,7 +29,17 @@ class mc {
 
     public function batchSet($dataArray) {
 
-        return $this->m->setMulti($dataArray);
+        return $this->m->setMulti($dataArray, 3600 * 24);
 
+    }
+
+    public function touchKeys($keys) {
+        foreach ($keys as $key) {
+            if (!$this->m->touch($key, 3600 * 24)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

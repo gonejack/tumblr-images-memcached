@@ -126,7 +126,7 @@ class handler {
                         }
                         $images = array_filter($images);
 
-                        Output::writeImagesToCache($images);
+                        Output::writeImagesToCache($images, array_keys($imagesFromCache));
 
                         $zipPack = Content::getImagesZipPack($images);
                         Output::echoZipFile($zipPack);

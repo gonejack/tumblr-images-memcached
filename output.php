@@ -50,15 +50,22 @@ class Output {
         echo $image;
     }
 
-    public static function writeImagesToCache($images) {
+    public static function writeImagesToCache($images, $cachedImagesKeys = array()) {
         !static::$mc && (static::$mc = new mc());
 
         $fileNameAsKey = array();
         foreach ($images as $url => &$image) {
-            $fileNameAsKey[basename($url)] = $image;
+            $fileName = basename($url);
+            if ($cachedImagesKeys && in_array($fileName, $cachedImagesKeys)) {
+                continue;
+            } else {
+                $fileNameAsKey[$fileName] = $image;
+            }
         }
 
-        static::$mc->batchSet($fileNameAsKey);
+
+        $fileNameAsKey && static::$mc->batchSet($fileNameAsKey);
+        $cachedImagesKeys && static::$mc->touchKeys($cachedImagesKeys);
     }
 
     public static function writePostInfoToCache($postParam, $postInfo) {
