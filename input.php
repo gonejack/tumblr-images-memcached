@@ -8,7 +8,7 @@
 
 class Input {
 
-    private static $mc = null;
+    private static $mc;
 
     public static function isImageUrl($url) {
         $pattern = "<https?://\d+\.media\.tumblr\.com/(\w+/)?tumblr_\w+_(1280|540|500|400|250)\.(png|jpg|gif)>";

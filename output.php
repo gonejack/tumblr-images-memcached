@@ -8,7 +8,7 @@
 
 class Output {
 
-    public static $mc = null;
+    private static $mc;
 
     public static function redirect($redirect_url) {
         header('Location: ' . $redirect_url, true, 301);
