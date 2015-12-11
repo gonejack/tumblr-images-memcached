@@ -77,9 +77,10 @@ class Input {
 
     public static function fetchImageFromNetwork($url) {
 
-        $validStatus = array(200, 301, 304);
         $image = @file_get_contents($url);
+
         $status = static::parseHeaders($http_response_header, 'status');
+        $validStatus = array(200, 301, 304);
         $fetched = in_array($status, $validStatus);
 
         if ($fetched) {

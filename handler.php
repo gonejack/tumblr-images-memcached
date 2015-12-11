@@ -135,10 +135,16 @@ class handler {
                         }
                         $images = array_filter($images);
 
+                        var_dump(count($images));
+                        var_dump(array_keys($images));
+                        var_dump(array_map(function ($image) {
+                            return strlen($image);
+                        }, $images));
+
                         Output::writeImagesToCache($images);
 
                         $zipPack = Content::getImagesZipPack($images);
-                        Output::echoZipFile($zipPack);
+                        //Output::echoZipFile($zipPack);
 
                     }
                     break;

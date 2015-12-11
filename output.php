@@ -45,6 +45,7 @@ class Output {
     }
 
     public static function writeImagesToCache($images) {
+        !static::$mc && (static::$mc = new mc());
 
         $fileNameAsKey = array();
         foreach ($images as $url => &$image) {
