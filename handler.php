@@ -94,7 +94,7 @@ class handler {
                 case 'photo':
 
                     $photoUrls = Content::$parserName($postInfo);
-                    $photoCount = $photoUrls['count'];
+                    $photoCount = count($photoUrls);
 
                     if ($photoCount === 0) {
 
