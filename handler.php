@@ -118,20 +118,11 @@ class handler {
                         foreach ($randomUrls as $photoUrl) {
 
                             $fileName = basename($photoUrl);
-                            $temp = null;
-
                             if (isset($imagesFromCache[$fileName])) {
-
-                                $temp = $imagesFromCache[$fileName];
-
+                                $images[$photoUrl] = $imagesFromCache[$fileName];
                             } else {
-
-                                $imageFromNetwork = Input::fetchImageFromNetwork($photoUrl);
-                                $imageFromNetwork && ($temp = $imageFromNetwork);
-
+                                $images[$photoUrl] = Input::fetchImageFromNetwork($photoUrl);
                             }
-
-                            $temp && ($images[$photoUrl] = $temp);
                         }
                         $images = array_filter($images);
 
