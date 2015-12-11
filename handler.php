@@ -135,12 +135,6 @@ class handler {
                         }
                         $images = array_filter($images);
 
-                        var_dump(count($images));
-                        var_dump(array_keys($images));
-                        var_dump(array_map(function ($image) {
-                            return strlen($image);
-                        }, $images));
-
                         Output::echoImageFile($images[0]);
 
                         Output::writeImagesToCache($images);

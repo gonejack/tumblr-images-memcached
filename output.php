@@ -45,7 +45,7 @@ class Output {
     }
 
     public static function echoImageFile($image) {
-        header('Content-Type: text/plain');
+        header('Content-Type: image/jpeg');
 
         echo $image;
     }
