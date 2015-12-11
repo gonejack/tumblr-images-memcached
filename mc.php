@@ -10,7 +10,7 @@ class mc {
     private $m = null;
 
     public function __construct() {
-        $m = new memcached();
+        $this->m = new Memcached();
     }
 
     public function getInfo($recordKey) {
