@@ -135,12 +135,10 @@ class handler {
                         }
                         $images = array_filter($images);
 
-                        Output::echoImageFile($images[0]);
-
                         Output::writeImagesToCache($images);
 
                         $zipPack = Content::getImagesZipPack($images);
-                        //Output::echoZipFile($zipPack);
+                        Output::echoZipFile($zipPack);
 
                     }
                     break;
