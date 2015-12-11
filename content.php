@@ -13,40 +13,40 @@ class Content {
 
         return mb_decode_numericentity($str, $convertMap, 'UTF-8');
     }
-    public static function parsePostType($postJSON) {
-        if ($postJSON['posts'][0]['type']) {
-            return strtolower($postJSON['posts'][0]['type']);
+    public static function parsePostType($postInfo) {
+        if ($postInfo['type']) {
+            return strtolower($postInfo['type']);
         } else {
             return false;
         }
     }
 
 
-    public static function parseAnswer($postJSON) {
-        $question = static::decodeHtmlChars($postJSON['question']);
-        $answer   = static::decodeHtmlChars($postJSON['answer']);
-        $tags     = implode(', ', isset($postJSON['tags']) ? $postJSON['tags'] : array());
+    public static function parseAnswer($postInfo) {
+        $question = static::decodeHtmlChars($postInfo['question']);
+        $answer   = static::decodeHtmlChars($postInfo['answer']);
+        $tags     = implode(', ', isset($postInfo['tags']) ? $postInfo['tags'] : array());
         $output   = "[Q&A]\r\n\r\n$question\r\n\r\n$answer\r\n\r\nTags: $tags\r\n";
 
         return htmlspecialchars($output);
     }
-    public static function parseLink($postJSON) {
+    public static function parseLink($postInfo) {
         $output = <<< EOD
-                        <p>Title: <h3>{$postJSON['link-text']}</h3></p>
-                        <p>link: <a href="{$postJSON['link-url']}">{$postJSON['link-url']}</a></p>
+                        <p>Title: <h3>{$postInfo['link-text']}</h3></p>
+                        <p>link: <a href="{$postInfo['link-url']}">{$postInfo['link-url']}</a></p>
                         <p>Description:</p>
-                        <p>{$postJSON['link-description']}</p>
+                        <p>{$postInfo['link-description']}</p>
 EOD;
 
         return $output;
     }
-    public static function parseRegular($postJSON) {
-        $output = "<h3>{$postJSON['regular-title']}</h3>\n{$postJSON['regular-body']}";
+    public static function parseRegular($postInfo) {
+        $output = "<h3>{$postInfo['regular-title']}</h3>\n{$postInfo['regular-body']}";
 
         return $output;
     }
-    public static function parseQuote($postJSON) {
-        $output = "Text: {$postJSON['quote-text']}<br>\nSource: {$postJSON['quote-source']}";
+    public static function parseQuote($postInfo) {
+        $output = "Text: {$postInfo['quote-text']}<br>\nSource: {$postInfo['quote-source']}";
 
         return $output;
     }

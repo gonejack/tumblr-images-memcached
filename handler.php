@@ -28,19 +28,19 @@ class handler {
                 $errMsg = "No a valid tumblr URL: $url";
                 throw new Exception($errMsg);
             } else {
-                $postInfo = Input::fetchQuickResponseInfoFromCache($postParam);
-                if ($postInfo) {
+                $quickInfo = Input::fetchQuickResponseInfoFromCache($postParam);
+                if ($quickInfo) {
                     //make quick response
-                    switch ($postInfo['type']) {
+                    switch ($quickInfo['type']) {
                         case 'html':
-                            Output::echoHtmlFile($postInfo['content']);
+                            Output::echoHtmlFile($quickInfo['content']);
                             break;
                         case 'video':
                         case 'singlePhoto':
-                            Output::redirect($postInfo['content']);
+                            Output::redirect($quickInfo['content']);
                             break;
                         case 'error':
-                            Output::echoTxtFile($postInfo['content']);
+                            Output::echoTxtFile($quickInfo['content']);
                             break;
                     }
 
@@ -58,7 +58,8 @@ class handler {
                 Output::writePostInfoToCache($postParam, $postJSON);
             }
 
-            $postType = Content::parsePostType($postJSON);
+            $postInfo = $postJSON['posts'][0];
+            $postType = Content::parsePostType($postInfo);
             $parserName = 'parse' . ucfirst($postType);
             $recordForNextTime = null;
 
@@ -67,7 +68,7 @@ class handler {
                 case 'link':
                 case 'regular':
                 case 'quote':
-                    $output = Content::$parserName($postJSON);
+                    $output = Content::$parserName($postInfo);
                     Output::echoHtmlFile($output);
                     $recordForNextTime = array(
                         'type' => 'html',
@@ -76,7 +77,7 @@ class handler {
                     break;
                 case 'video':
 
-                    $output = Content::$parserName($postJSON);
+                    $output = Content::$parserName($postInfo);
                     if (!$output) {
                         $errMsg = "Can't not parse video post, maybe it's too complicated to get the video source location out.\r\n$url";
                         throw new Exception($errMsg);
@@ -92,7 +93,7 @@ class handler {
                 case 'unknow':
                 case 'photo':
 
-                    $photoUrls = Content::$parserName($postJSON);
+                    $photoUrls = Content::$parserName($postInfo);
                     $photoCount = $photoUrls['count'];
 
                     if ($photoCount === 0) {
