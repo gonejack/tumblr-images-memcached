@@ -129,7 +129,7 @@ class handler {
                         Output::writeImagesToCache($images);
 
                         $zipPack = Content::getImagesZipPack($images);
-                        //Output::echoZipFile($zipPack);
+                        Output::echoZipFile($zipPack);
 
                     }
                     break;

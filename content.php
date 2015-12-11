@@ -120,10 +120,8 @@ EOD;
         $zip = new ZipFile();
 
         foreach ($images as $url => &$image) {
-            echo $url, "<br>";
-            echo strlen($image);
             $fileName = basename($url);
-            $zip->addFile($fileName, $image);
+            $zip->addFile($image, $fileName);
         }
 
         return $zip->file();
