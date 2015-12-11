@@ -33,6 +33,12 @@ class mc {
 
     }
 
+    public function singleSet($key, $data) {
+
+        return $this->m->set($key, $data, 3600 * 24);
+
+    }
+
     public function touchKeys($keys) {
         foreach ($keys as $key) {
             if (!$this->m->touch($key, 3600 * 24)) {

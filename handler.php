@@ -7,6 +7,12 @@
  */
 class handler {
 
+    private static $mc;
+
+    private static function loadMemcached() {
+        !static::$mc && (static::$mc = new mc());
+    }
+
     private static function parseUrlParam($url) {
         if (preg_match('<https?://(.+)/post/(\d+)>', $url, $match)) {
             return array(
@@ -113,24 +119,27 @@ class handler {
 
                         $imagesFromCache = Input::fetchImagesFromCache($photoUrls);
 
-                        $images = array_fill_keys($photoUrls, null);
-                        $randomUrls = array_values($photoUrls); shuffle($randomUrls);
-                        foreach ($randomUrls as $photoUrl) {
+                        static::loadMemcached();
 
+                        $images = array_fill_keys($photoUrls, null);
+                        $randomUrls = array_values($photoUrls);
+                        shuffle($randomUrls);
+                        foreach ($randomUrls as $photoUrl) {
                             $fileName = basename($photoUrl);
                             if (isset($imagesFromCache[$fileName])) {
                                 $images[$photoUrl] = $imagesFromCache[$fileName];
                             } else {
                                 $images[$photoUrl] = Input::fetchImageFromNetwork($photoUrl);
+                                static::$mc->singleSet($fileName, $images[$photoUrl]);
                             }
                         }
                         $images = array_filter($images);
 
-                        Output::writeImagesToCache($images, array_keys($imagesFromCache));
-
                         $zipPack = Content::getImagesZipPack($images);
                         Output::echoZipFile($zipPack);
 
+                        static::$mc->touchKeys(array_keys($imagesFromCache));
+                        //Output::writeImagesToCache($images, array_keys($imagesFromCache));
                     }
                     break;
 
