@@ -44,6 +44,12 @@ class Output {
         return true;
     }
 
+    public static function echoImageFile($image) {
+        header('Content-Type: text/plain');
+
+        echo $image;
+    }
+
     public static function writeImagesToCache($images) {
         !static::$mc && (static::$mc = new mc());
 

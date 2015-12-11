@@ -141,6 +141,8 @@ class handler {
                             return strlen($image);
                         }, $images));
 
+                        Output::echoImageFile($images[0]);
+
                         Output::writeImagesToCache($images);
 
                         $zipPack = Content::getImagesZipPack($images);
