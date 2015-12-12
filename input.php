@@ -95,7 +95,7 @@ class Input {
         $i = 0;
         do {
             $jsonStr    = file_get_contents($apiUrl);
-            $statusCode = (int) static::parseHeaders($http_response_header, 'status');
+            $statusCode = isset($http_response_header) ? (int) static::parseHeaders($http_response_header, 'status') : 0;
         } while (strlen($jsonStr) < 10 && $i++ < 3 && $statusCode !== 404);
 
         if (preg_match('<\{.+\}>', $jsonStr, $match)) {
