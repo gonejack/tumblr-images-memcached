@@ -122,6 +122,7 @@ class handler {
                         $total = count($photoUrls);
                         $cached = count($imagesFromCache);
                         $fetched = 0;
+                        $startTime = time();
 
                         static::loadMemcached();
 
@@ -143,8 +144,8 @@ class handler {
                         $zipPack = Content::getImagesZipPack($images);
                         Output::echoZipFile($zipPack);
 
-
-                        syslog(LOG_INFO, "Total: $total, From cache: $cached, From network: $fetched");
+                        $timeUsed = time() - $startTime;
+                        syslog(LOG_INFO, "Total: $total, From cache: $cached, From network: $fetched, Time used: {$timeUsed}s");
 
                         static::$mc->touchKeys(array_keys($imagesFromCache));
                         //Output::writeImagesToCache($images, array_keys($imagesFromCache));
