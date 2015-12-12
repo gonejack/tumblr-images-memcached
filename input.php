@@ -105,7 +105,11 @@ class Input {
         }
     }
 
-    public static function parseHeaders(array $headers, $header = null) {
+    public static function parseHeaders($headers, $header = null) {
+        if (!$headers) {
+            return false;
+        }
+
         $output = array();
 
         if ('HTTP' === substr($headers[0], 0, 4)) {
@@ -118,12 +122,12 @@ class Input {
             $output[strtolower($h[0])] = $h[1];
         }
 
-        if (null !== $header) {
+        if ($header !== null) {
             if (isset($output[strtolower($header)])) {
                 return $output[strtolower($header)];
+            } else {
+                return null;
             }
-
-            return null;
         }
 
         return $output;
