@@ -18,7 +18,7 @@ class Output {
 
     public static function echoHtmlFile($content) {
         header('Content-Type: text/html');
-        header('Content-Disposition: attachment; filename=' . date('Y/M/j/D G:i:s') . '.htm');
+        header('Content-Disposition: attachment; filename=' . date('Y-M-j-D-G-i-s') . '.htm');
 
         echo $content;
 
@@ -28,7 +28,7 @@ class Output {
     public static function echoZipFile($zip_str) {
         header('Content-Type: application/zip');
         header('Content-Length: ' . strlen($zip_str));
-        header('Content-Disposition: attachment; filename=' . date('Y/M/j/D G:i:s') . '.zip');
+        header('Content-Disposition: attachment; filename=' . date('Y-M-j-D-G-i-s') . '.zip');
 
         echo $zip_str;
 
@@ -37,7 +37,7 @@ class Output {
 
     public static function echoTxtFile($content) {
         header('Content-Type: text/plain');
-        header('Content-Disposition: attachment; filename=' . date('Y/M/j/D G:i:s') . '.txt');
+        header('Content-Disposition: attachment; filename=' . date('Y-M-j-D-G-i-s') . '.txt');
 
         echo $content;
 
