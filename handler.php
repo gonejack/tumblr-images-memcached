@@ -117,7 +117,11 @@ class handler {
 
                     } else {
 
-                        $imagesFromCache = Input::fetchImagesFromCache($photoUrls);
+                        $imagesFromCache = @Input::fetchImagesFromCache($photoUrls);
+
+                        $total = count($photoUrls);
+                        $cached = count($imagesFromCache);
+                        $fetched = 0;
 
                         static::loadMemcached();
 
@@ -130,6 +134,7 @@ class handler {
                                 $images[$photoUrl] = $imagesFromCache[$fileName];
                             } else {
                                 $images[$photoUrl] = Input::fetchImageFromNetwork($photoUrl);
+                                $fetched++;
                                 static::$mc->singleSet($fileName, $images[$photoUrl]);
                             }
                         }
@@ -137,6 +142,9 @@ class handler {
 
                         $zipPack = Content::getImagesZipPack($images);
                         Output::echoZipFile($zipPack);
+
+
+                        syslog(LOG_INFO, "Total: $total, From cache: $cached, From network: $fetched");
 
                         static::$mc->touchKeys(array_keys($imagesFromCache));
                         //Output::writeImagesToCache($images, array_keys($imagesFromCache));
