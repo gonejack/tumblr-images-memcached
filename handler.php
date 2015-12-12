@@ -118,7 +118,7 @@ class handler {
 
                     } else {
 
-                        $imagesFromCache = @Input::fetchImagesFromCache($photoUrls);
+                        $imagesFromCache = Input::fetchImagesFromCache($photoUrls);
 
                         $total = count($photoUrls);
                         $cached = count($imagesFromCache);

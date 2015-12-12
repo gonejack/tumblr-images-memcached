@@ -23,7 +23,7 @@ class mc {
 
     public function batchGet($keys) {
 
-        return $this->m->getMulti($keys);
+        return @$this->m->getMulti($keys);
 
     }
 
