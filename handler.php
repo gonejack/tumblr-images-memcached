@@ -36,6 +36,7 @@ class handler {
             } else {
                 $quickInfo = Input::fetchQuickResponseInfoFromCache($postParam);
                 if ($quickInfo) {
+                    syslog(LOG_INFO, "Quick Response.");
                     //make quick response
                     switch ($quickInfo['type']) {
                         case 'html':
