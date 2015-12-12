@@ -85,7 +85,7 @@ class ZipFile
         // "local file header" segment
         $unc_len = strlen($data);
         $crc     = crc32($data);
-        $zdata   = gzcompress($data);
+        $zdata   = gzcompress($data, 0);
         $zdata   = substr(substr($zdata, 0, strlen($zdata) - 4), 2); // fix crc bug
         $c_len   = strlen($zdata);
         $fr .= pack('V', $crc);             // crc32
