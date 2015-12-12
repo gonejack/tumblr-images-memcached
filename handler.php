@@ -145,7 +145,7 @@ class handler {
                         $zipPack = Content::getImagesZipPack($images);
                         Output::echoZipFile($zipPack);
 
-                        $timeUsed = microtime(true) - $startTime;
+                        $timeUsed = number_format(microtime(true) - $startTime, 3, '.', '');
                         syslog(LOG_INFO, "Total: $total, From cache: $cached, From network: $fetched, Time used: {$timeUsed}s");
 
                         static::$mc->touchKeys(array_keys($imagesFromCache));
