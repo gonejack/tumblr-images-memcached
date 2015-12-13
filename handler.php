@@ -135,8 +135,11 @@ class handler {
                                 $images[$photoUrl] = &$imagesFromCache[$fileName];
                             } else {
                                 $images[$photoUrl] = Input::fetchImageFromNetwork($photoUrl);
+
+                                $imageSize = strlen($images[$photoUrl]);
+                                $imageSize > 0 && $imageSize < 980000 && static::$mc->singleSet($fileName, $images[$photoUrl]);
+
                                 $fetched++;
-                                static::$mc->singleSet($fileName, $images[$photoUrl]);
                             }
                         }
 
