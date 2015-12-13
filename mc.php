@@ -12,7 +12,7 @@ class mc {
     public function __construct() {
         $this->m = new Memcached();
         $this->m->setOption(Memcached::OPT_COMPRESSION, false);
-        syslog(LOG_INFO, 'Memcached::HAVE_IGBINARY: ' . Memcached::HAVE_IGBINARY ? 'true' : 'false');
+        $this->m->setOption(Memcached::OPT_SERIALIZER, Memcached::SERIALIZER_IGBINARY);
     }
 
     public function getInfo($recordKey) {

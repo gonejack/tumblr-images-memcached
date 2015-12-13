@@ -31,6 +31,11 @@ function main($isHashHost, $hostNumber) {
         } elseif ($isHashHost) {
             Router::route($url, $hostNumber);
         } else {
+            $mc = new mc();
+            Input::loadMemcached($mc);
+            Output::loadMemcached($mc);
+            Handler::loadMemcached($mc);
+
             Handler::handle($url);
         }
 

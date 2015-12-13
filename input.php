@@ -10,6 +10,10 @@ class Input {
 
     private static $mc;
 
+    public static function loadMemcached($mc = null) {
+        !static::$mc && (static::$mc = $mc ? $mc : (new mc()));
+    }
+
     public static function isImageUrl($url) {
         $pattern = "<https?://\d+\.media\.tumblr\.com/(\w+/)?tumblr_\w+_(1280|540|500|400|250)\.(png|jpg|gif)>";
 

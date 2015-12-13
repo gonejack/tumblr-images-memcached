@@ -9,8 +9,8 @@ class handler {
 
     private static $mc;
 
-    private static function loadMemcached() {
-        !static::$mc && (static::$mc = new mc());
+    public static function loadMemcached($mc = null) {
+        !static::$mc && (static::$mc = $mc ? $mc : (new mc()));
     }
 
     private static function parseUrlParam($url) {
@@ -124,8 +124,6 @@ class handler {
                         $cached = count($imagesFromCache);
                         $fetched = 0;
                         $startTime = microtime(true);
-
-                        static::loadMemcached();
 
                         $images = array_fill_keys($photoUrls, null);
                         $randomUrls = array_values($photoUrls);

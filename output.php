@@ -10,6 +10,10 @@ class Output {
 
     private static $mc;
 
+    public static function loadMemcached($mc = null) {
+        !static::$mc && (static::$mc = $mc ? $mc : (new mc()));
+    }
+
     public static function redirect($redirect_url) {
         header('Location: ' . $redirect_url, true, 301);
 
