@@ -58,6 +58,7 @@ class handler {
             $postJSON = Input::fetchPostInfoFromCache($postParam);
             !$postJSON && ($postJSON = Input::queryTumblrApi($postParam));
             if (!$postJSON) {
+                $postParam = false; //don't write quick response
                 $errMsg = 'No post info back from Tumblr';
                 throw new Exception($errMsg);
             } else {
