@@ -139,7 +139,6 @@ class handler {
                                 static::$mc->singleSet($fileName, $images[$photoUrl]);
                             }
                         }
-                        $images = array_filter($images);
 
                         $zipPack = Content::getImagesZipPack($images);
                         Output::echoZipFile($zipPack);
