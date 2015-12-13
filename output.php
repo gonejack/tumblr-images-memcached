@@ -29,7 +29,7 @@ class Output {
         return true;
     }
 
-    public static function echoZipFile($zip_str) {
+    public static function echoZipFile(&$zip_str) {
         header('Content-Type: application/zip');
         header('Content-Length: ' . strlen($zip_str));
         header('Content-Disposition: attachment; filename=' . date('Y-M-j-D-G-i-s') . '.zip');

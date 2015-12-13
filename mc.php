@@ -19,7 +19,7 @@ class mc {
         return $this->m->get($recordKey);
     }
 
-    public function setInfo($recordKey, $recordData) {
+    public function setInfo($recordKey, &$recordData) {
         return $this->m->set($recordKey, $recordData, 3600 * 24);
     }
 
@@ -35,7 +35,7 @@ class mc {
 
     }
 
-    public function singleSet($key, $data) {
+    public function singleSet($key, &$data) {
 
         return $this->m->set($key, $data, 3600 * 24);
 

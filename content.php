@@ -115,7 +115,7 @@ EOD;
         return $errText;
     }
 
-    public static function getImagesZipPack($images) {
+    public static function getImagesZipPack(&$images) {
         require_once('zip.lib.php');
         $zip = new ZipFile();
 

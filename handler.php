@@ -132,7 +132,7 @@ class handler {
                         foreach ($randomUrls as $photoUrl) {
                             $fileName = basename($photoUrl);
                             if (isset($imagesFromCache[$fileName])) {
-                                $images[$photoUrl] = $imagesFromCache[$fileName];
+                                $images[$photoUrl] = &$imagesFromCache[$fileName];
                             } else {
                                 $images[$photoUrl] = Input::fetchImageFromNetwork($photoUrl);
                                 $fetched++;
