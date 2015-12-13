@@ -74,7 +74,7 @@ class ZipFile
      *
      * @return void
      */
-    function addFile($data, $name, $time = 0) {
+    function addFile(&$data, $name, $time = 0) {
         $name     = str_replace('\\', '/', $name);
         $hexdtime = pack('V', $this->unix2DosTime($time));
         $fr       = "\x50\x4b\x03\x04";
