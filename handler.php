@@ -31,7 +31,7 @@ class handler {
         try {
 
             if (!$postParam) {
-                $errMsg = "No a valid tumblr URL: $url";
+                $errMsg = "No a valid tumblr URL.";
                 throw new Exception($errMsg);
             } else {
                 $quickInfo = Input::fetchQuickResponseInfoFromCache($postParam);
@@ -59,7 +59,7 @@ class handler {
             !$postJSON && ($postJSON = Input::queryTumblrApi($postParam));
             if (!$postJSON) {
                 $postParam = false; //don't write quick response
-                $errMsg = 'No post info back from Tumblr';
+                $errMsg = 'No post info back from Tumblr.';
                 throw new Exception($errMsg);
             } else {
                 //save post info to memcached
@@ -87,7 +87,7 @@ class handler {
 
                     $output = Content::$parserName($postInfo);
                     if (!$output) {
-                        $errMsg = "Can't not parse video post, maybe it's too complicated to get the video source location out.\r\n$url";
+                        $errMsg = "Can't not parse video post, maybe it's too complicated to get the video source location out.\r\n";
                         throw new Exception($errMsg);
                     } else {
                         Output::redirect($output);
@@ -106,7 +106,7 @@ class handler {
 
                     if ($photoCount === 0) {
 
-                        $errMsg = "No images found in the tumblr post: $url";
+                        $errMsg = "No images found in the tumblr post.";
                         throw new Exception($errMsg);
 
                     } elseif ($photoCount === 1) {
