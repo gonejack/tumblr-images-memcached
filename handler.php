@@ -87,7 +87,7 @@ class handler {
 
                     $output = Content::$parserName($postInfo);
                     if (!$output) {
-                        $errMsg = "Can't not parse video post, maybe it's too complicated to get the video source location out.\r\n";
+                        $errMsg = "Can't not parse video post, maybe it's too complicated to get the video source location out.";
                         throw new Exception($errMsg);
                     } else {
                         Output::redirect($output);
@@ -135,11 +135,8 @@ class handler {
                                 $images[$photoUrl] = &$imagesFromCache[$fileName];
                             } else {
                                 $images[$photoUrl] = Input::fetchImageFromNetwork($photoUrl);
-
-                                $imageSize = strlen($images[$photoUrl]);
-                                $imageSize > 0 && $imageSize < 980000 && static::$mc->singleSet($fileName, $images[$photoUrl]);
-
                                 $fetched++;
+                                static::$mc->singleSet($fileName, $images[$photoUrl]);
                             }
                         }
 
@@ -151,6 +148,7 @@ class handler {
 
                         static::$mc->touchKeys(array_keys($imagesFromCache));
                         //Output::writeImagesToCache($images, array_keys($imagesFromCache));
+
                     }
                     break;
 
@@ -172,12 +170,10 @@ class handler {
                 Output::writeQuickResponseInfoToCache($postParam, $recordForNextTime);
             }
 
-
             Output::echoTxtFile($errText);
 
         }
 
         return true;
     }
-
 }
