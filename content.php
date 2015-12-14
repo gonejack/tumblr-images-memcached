@@ -111,7 +111,9 @@ EOD;
     }
 
     public static function getErrorText($msg) {
-        $errText = "Error Happened.\r\nMessage: $msg";
+        $errText = "Error Happened.\r\n";
+        $errText .= "URL: {$_GET['url']}\r\n";
+        $errText .= "Message: $msg";
         return $errText;
     }
 
