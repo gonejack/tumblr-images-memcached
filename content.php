@@ -13,6 +13,7 @@ class Content {
 
         return mb_decode_numericentity($str, $convertMap, 'UTF-8');
     }
+
     public static function parsePostType($postInfo) {
         if ($postInfo['type']) {
             return strtolower($postInfo['type']);
@@ -20,7 +21,6 @@ class Content {
             return false;
         }
     }
-
 
     public static function parseAnswer($postInfo) {
         $question = static::decodeHtmlChars($postInfo['question']);
@@ -30,6 +30,7 @@ class Content {
 
         return htmlspecialchars($output);
     }
+
     public static function parseLink($postInfo) {
         $output = <<< EOD
                         <p>Title: <h3>{$postInfo['link-text']}</h3></p>
@@ -40,11 +41,13 @@ EOD;
 
         return $output;
     }
+
     public static function parseRegular($postInfo) {
         $output = "<h3>{$postInfo['regular-title']}</h3>\n{$postInfo['regular-body']}";
 
         return $output;
     }
+
     public static function parseQuote($postInfo) {
         $output = "Text: {$postInfo['quote-text']}<br>\nSource: {$postInfo['quote-source']}";
 
@@ -66,6 +69,7 @@ EOD;
 
         return false;
     }
+
     public static function parsePhoto($post_info) {
         $urls = array();
 
@@ -78,36 +82,6 @@ EOD;
         }
 
         return $urls;
-    }
-
-    public static function createRecordInfo($record_data) {
-        $data = $record_data['data'];
-        switch ($record_data['responseType']) {
-            case 'redirect':
-                redirect_location($data);
-                exit_script();
-                break;
-            case 'txt':
-                echoTxtFile($data);
-                exit_script();
-                break;
-            case 'html':
-                echoHtmlFile($data);
-                exit_script();
-                break;
-            case 'photoSet':
-                echoTxtFile($data);
-                exit_script();
-                break;
-            default:
-                echo 'unknow response type';
-                exit_script();
-        }
-
-        return true;
-    }
-    public static function parseRecordInfo($record_data) {
-
     }
 
     public static function getErrorText($msg) {

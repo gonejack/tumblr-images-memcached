@@ -7,6 +7,11 @@
  */
 class Router {
 
+    /**
+     * urlencode url components
+     * @param $url
+     * @return string
+     */
     private static function encodeCjkChars($url) {
         if (preg_match('<(http.+?tumblr\.com)(.+$)>i', $url, $matches)) {
             $path_parts = array_map('urlencode', explode('/', $matches[2]));
@@ -16,12 +21,23 @@ class Router {
         return $url;
     }
 
+    /**
+     * hash sting into a given number range
+     * @param $str
+     * @param $maxRange
+     * @return number
+     */
     private static function strHash($str, $maxRange) {
         $strValue = crc32($str);
 
         return abs($strValue % $maxRange) + 1;
     }
 
+    /**
+     * redirect request to a host by hashing the given url
+     * @param $url
+     * @param $numberOfHost
+     */
     public static function route($url, $numberOfHost) {
 
         $hashNode    = static::strHash($url, $numberOfHost);

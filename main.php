@@ -16,6 +16,10 @@ spl_autoload_register(function ($class) {
 
 main($isHashHost, $hostNumber);
 
+/**
+ * @param $isHashHost Boolean Is this host a router
+ * @param $hostNumber Number How many host there
+ */
 function main($isHashHost, $hostNumber) {
 
     $url = isset($_GET['url']) ? $_GET['url'] : '';
@@ -42,6 +46,9 @@ function main($isHashHost, $hostNumber) {
     }
 }
 
+/**
+ * @param null $message
+ */
 function exit_script($message = null) {
     exit($message);
 }

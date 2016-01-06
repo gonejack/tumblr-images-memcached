@@ -7,6 +7,9 @@
  */
 class handler {
 
+    /**
+     * @var mc|null $mc
+     */
     private static $mc;
 
     public static function loadMemcached($mc = null) {
@@ -27,6 +30,7 @@ class handler {
     public static function handle($url) {
 
         $postParam = static::parseUrlParam($url);
+        $recordForNextTime = null;
 
         try {
 
@@ -69,7 +73,6 @@ class handler {
             $postInfo = $postJSON['posts'][0];
             $postType = Content::parsePostType($postInfo);
             $parserName = 'parse' . ucfirst($postType);
-            $recordForNextTime = null;
 
             switch ($postType) {
                 case 'answer':
@@ -84,10 +87,9 @@ class handler {
                     );
                     break;
                 case 'video':
-
                     $output = Content::$parserName($postInfo);
                     if (!$output) {
-                        $errMsg = "Can't not parse video post, maybe it's too complicated to get the video source location out.";
+                        $errMsg = "Can't not parse video post, maybe it's too complicated to get the video source out.";
                         throw new Exception($errMsg);
                     } else {
                         Output::redirect($output);
@@ -96,11 +98,10 @@ class handler {
                             'content' => $output
                         );
                     }
-
                     break;
                 case 'unknow':
                 case 'photo':
-
+                default:
                     $photoUrls = Content::$parserName($postInfo);
                     $photoCount = count($photoUrls);
 
@@ -148,29 +149,25 @@ class handler {
 
                         static::$mc->touchKeys(array_keys($imagesFromCache));
                         //Output::writeImagesToCache($images, array_keys($imagesFromCache));
-
                     }
                     break;
 
             }
 
-            $recordForNextTime && Output::writeQuickResponseInfoToCache($postParam, $recordForNextTime);
-
         } catch (Exception $e) {
 
             $errText = Content::getErrorText($e->getMessage());
 
-            if ($postParam) {
-
-                $recordForNextTime = array(
-                    'type' => 'error',
-                    'content' => $errText
-                );
-
-                Output::writeQuickResponseInfoToCache($postParam, $recordForNextTime);
-            }
+            $recordForNextTime = array(
+                'type' => 'error',
+                'content' => $errText
+            );
 
             Output::echoTxtFile($errText);
+
+        } finally {
+
+            $postParam && $recordForNextTime && Output::writeQuickResponseInfoToCache($postParam, $recordForNextTime);
 
         }
 

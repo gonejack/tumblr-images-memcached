@@ -8,18 +8,31 @@
 
 class Output {
 
+    /**
+     * @var mc|null $mc
+     */
     private static $mc;
 
     public static function loadMemcached($mc = null) {
         !static::$mc && (static::$mc = $mc ? $mc : (new mc()));
     }
 
+    /**
+     * send 301 redirection
+     * @param $redirect_url
+     * @return bool
+     */
     public static function redirect($redirect_url) {
         header('Location: ' . $redirect_url, true, 301);
 
         return true;
     }
 
+    /**
+     * echo html as file download
+     * @param string $content
+     * @return bool
+     */
     public static function echoHtmlFile($content) {
         header('Content-Type: text/html');
         header('Content-Disposition: attachment; filename=' . date('Y-M-j-D-G-i-s') . '.htm');
@@ -29,6 +42,11 @@ class Output {
         return true;
     }
 
+    /**
+     * echo zip as file download
+     * @param string $zip_str
+     * @return bool
+     */
     public static function echoZipFile(&$zip_str) {
         header('Content-Type: application/zip');
         header('Content-Length: ' . strlen($zip_str));
@@ -39,6 +57,11 @@ class Output {
         return true;
     }
 
+    /**
+     * echo txt as file download
+     * @param string $content
+     * @return bool
+     */
     public static function echoTxtFile($content) {
         header('Content-Type: text/plain');
         header('Content-Disposition: attachment; filename=' . date('Y-M-j-D-G-i-s') . '.txt');
@@ -48,12 +71,20 @@ class Output {
         return true;
     }
 
+    /**
+     * echo image as file download
+     * @param string $image
+     */
     public static function echoImageFile($image) {
         header('Content-Type: image/jpeg');
 
         echo $image;
     }
 
+    /**
+     * @param $images
+     * @param array $cachedImagesKeys
+     */
     public static function writeImagesToCache($images, $cachedImagesKeys = array()) {
         !static::$mc && (static::$mc = new mc());
 
@@ -72,6 +103,12 @@ class Output {
         $cachedImagesKeys && static::$mc->touchKeys($cachedImagesKeys);
     }
 
+    /**
+     * cache data fetched from tumblr api
+     * @param array $postParam array('post_domain' => 'xx.tumblr.com', 'post_id' => xxxx)
+     * @param array $postInfo dictionary data
+     * @return bool
+     */
     public static function writePostInfoToCache($postParam, $postInfo) {
         !static::$mc && (static::$mc = new mc());
 
@@ -82,6 +119,12 @@ class Output {
         return $mc->setInfo($key, $postInfo);
     }
 
+    /**
+     * cache processed result data
+     * @param array $postParam array('post_domain' => 'xx.tumblr.com', 'post_id' => xxxx)
+     * @param mixed $postInfo processed result data
+     * @return bool
+     */
     public static function writeQuickResponseInfoToCache($postParam, $postInfo) {
         !static::$mc && (static::$mc = new mc());
 
