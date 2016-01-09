@@ -13,7 +13,7 @@ class handler {
     private static $mc;
 
     public static function loadMemcached($mc = null) {
-        !static::$mc && (static::$mc = $mc ? $mc : (new mc()));
+        !static::$mc && (static::$mc = $mc ?: new mc());
     }
 
     /**
@@ -65,8 +65,7 @@ class handler {
 
                 // no quick response found, we got to process it
                 else {
-                    $postJSON = Input::fetchPostInfoFromCache($postParam);
-                    $postJSON = $postJSON ? $postJSON : Input::queryTumblrApi($postParam);
+                    $postJSON = Input::fetchPostInfoFromCache($postParam) ?: Input::queryTumblrApi($postParam);
 
                     // post json gotten
                     if ($postJSON) {
@@ -152,7 +151,7 @@ class handler {
                                             // not in cache
                                             else {
                                                 $imagesContainer[$imgUrl] = Input::fetchImageFromNetwork($imgUrl); // fetch from network
-                                                static::$mc->singleSet($fileName, $imagesContainer[$imgUrl]); // write to cache
+                                                $imagesContainer[$imgUrl] && static::$mc->singleSet($fileName, $imagesContainer[$imgUrl]); // write to cache
 
                                                 $fetched++;
                                             }
@@ -183,7 +182,7 @@ class handler {
 
                     }
 
-                    // not post json back from tumblr
+                    // no post json back from tumblr
                     else {
                         $postParam = false; //don't write quick response
                         $errMsg = 'No post info back from Tumblr.';

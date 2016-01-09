@@ -14,7 +14,7 @@ class Output {
     private static $mc;
 
     public static function loadMemcached($mc = null) {
-        !static::$mc && (static::$mc = $mc ? $mc : (new mc()));
+        !static::$mc && (static::$mc = $mc ?: new mc());
     }
 
     /**
@@ -91,13 +91,11 @@ class Output {
         $fileNameAsKey = array();
         foreach ($images as $url => &$image) {
             $fileName = basename($url);
-            if ($cachedImagesKeys && in_array($fileName, $cachedImagesKeys)) {
-                continue;
-            } else {
+
+            if (!in_array($fileName, $cachedImagesKeys)) {
                 $fileNameAsKey[$fileName] = $image;
             }
         }
-
 
         $fileNameAsKey && static::$mc->batchSet($fileNameAsKey);
         $cachedImagesKeys && static::$mc->touchKeys($cachedImagesKeys);
@@ -112,11 +110,9 @@ class Output {
     public static function writePostInfoToCache($postParam, $postInfo) {
         !static::$mc && (static::$mc = new mc());
 
-        $mc = static::$mc;
-
         $key = "{$postParam['post_domain']}|{$postParam['post_id']}";
 
-        return $mc->setInfo($key, $postInfo);
+        return static::$mc->setInfo($key, $postInfo);
     }
 
     /**
@@ -128,10 +124,8 @@ class Output {
     public static function writeQuickResponseInfoToCache($postParam, $postInfo) {
         !static::$mc && (static::$mc = new mc());
 
-        $mc = static::$mc;
-
         $key = "{$postParam['post_domain']}|{$postParam['post_id']}|QuickResponse";
 
-        return $mc->setInfo($key, $postInfo);
+        return static::$mc->setInfo($key, $postInfo);
     }
 }

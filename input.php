@@ -19,7 +19,7 @@ class Input {
      * @param mc $mc
      */
     public static function loadMemcached($mc = null) {
-        !static::$mc && (static::$mc = $mc ? $mc : (new mc()));
+        !static::$mc && (static::$mc = $mc ?: new mc());
     }
 
     /**
@@ -41,11 +41,9 @@ class Input {
     public static function fetchPostInfoFromCache($postParam) {
         !static::$mc && (static::$mc = new mc());
 
-        $mc = static::$mc;
-
         $key = "{$postParam['post_domain']}|{$postParam['post_id']}";
 
-        return $mc->getInfo($key);
+        return static::$mc->getInfo($key);
     }
 
     /**
@@ -56,11 +54,9 @@ class Input {
     public static function fetchQuickResponseInfoFromCache($postParam) {
         !static::$mc && (static::$mc = new mc());
 
-        $mc = static::$mc;
-
         $key = "{$postParam['post_domain']}|{$postParam['post_id']}|QuickResponse";
 
-        return $mc->getInfo($key);
+        return static::$mc->getInfo($key);
     }
 
     /**
@@ -92,19 +88,19 @@ class Input {
         foreach ($urls as $url) {
 
             $image_str = @file_get_contents($url);
-            if ($image_str === false) {
-                continue;
+
+            // fetched
+            if ($image_str !== false) {
+                $status = static::parseHeaders($http_response_header, 'status');
+                $available = in_array($status, $valid_status);
+
+                // available
+                if ($available) {
+                    $images_pack['images'][]    = $image_str;
+                    $images_pack['fileNames'][] = basename($url);
+                    $images_pack['count']++;
+                }
             }
-
-            $status = static::parseHeaders($http_response_header, 'status');
-
-            $fetched = in_array($status, $valid_status);
-            if ($fetched) {
-                $images_pack['images'][]    = $image_str;
-                $images_pack['fileNames'][] = basename($url);
-                $images_pack['count']++;
-            }
-
         }
 
         return $images_pack;
@@ -121,14 +117,9 @@ class Input {
 
         $status = static::parseHeaders($http_response_header, 'status');
         $validStatus = array(200, 301, 304);
-        $fetched = in_array($status, $validStatus);
+        $available = in_array($status, $validStatus);
 
-        if ($fetched) {
-            return $image;
-        } else {
-            return false;
-        }
-
+        return $available ? $image : false;
     }
 
     /**
@@ -145,11 +136,7 @@ class Input {
             $statusCode = isset($http_response_header) ? (int) static::parseHeaders($http_response_header, 'status') : 0;
         } while (strlen($jsonStr) < 10 && $i++ < 3 && $statusCode !== 404);
 
-        if (preg_match('<\{.+\}>', $jsonStr, $match)) {
-            return json_decode($match[0], true);
-        } else {
-            return false;
-        }
+        return preg_match('<\{.+\}>', $jsonStr, $match) ? json_decode($match[0], true) : false;
     }
 
     /**
@@ -159,31 +146,31 @@ class Input {
      * @return array|bool|null|string header content. exception: no valid $headers given, return false. no header specified, return $headers. specified header not found, return null.
      */
     public static function parseHeaders($headers, $header = null) {
-        if (!$headers) {
-            return false;
-        }
+        // headers given
+        if ($headers) {
+            $output = array();
 
-        $output = array();
-
-        if ('HTTP' === substr($headers[0], 0, 4)) {
-            list(, $output['status'], $output['status_text']) = explode(' ', $headers[0]);
-            unset($headers[0]);
-        }
-
-        foreach ($headers as $v) {
-            $h                         = preg_split('/:\s*/', $v);
-            $output[strtolower($h[0])] = $h[1];
-        }
-
-        if ($header !== null) {
-            if (isset($output[strtolower($header)])) {
-                return $output[strtolower($header)];
-            } else {
-                return null;
+            if (strpos($headers[0], 'HTTP') !== false) {
+                list(, $output['status'], $output['status_text']) = explode(' ', $headers[0]);
+                unset($headers[0]);
             }
+            foreach ($headers as $v) {
+                $h                         = preg_split('/:\s*/', $v);
+                $output[strtolower($h[0])] = $h[1];
+            }
+
+            // specific header given
+            if ($header = strtolower($header)) {
+                return isset($output[$header]) ? $output[$header] : null;
+            }
+
+            // return all headers back
+            else return $output;
+
         }
 
-        return $output;
+        // no headers given
+        else return false;
     }
 
 }
