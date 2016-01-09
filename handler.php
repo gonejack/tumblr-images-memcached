@@ -16,6 +16,11 @@ class handler {
         !static::$mc && (static::$mc = $mc ? $mc : (new mc()));
     }
 
+    /**
+     * get post identity params from url
+     * @param string $url
+     * @return array|bool params for constructing api query array('post_domain'=>'xx.tumblr.com', 'post_id'=>xxxx)
+     */
     private static function parseUrlParam($url) {
         if (preg_match('<https?://(.+)/post/(\d+)>', $url, $match)) {
             return array(
@@ -32,15 +37,17 @@ class handler {
         $postParam = static::parseUrlParam($url);
         $recordForNextTime = null;
 
+        // try to process it
         try {
 
-            if (!$postParam) {
-                $errMsg = "No a valid tumblr URL.";
-                throw new Exception($errMsg);
-            } else {
+            // a valid tumblr url given
+            if ($postParam) {
                 $quickInfo = Input::fetchQuickResponseInfoFromCache($postParam);
+
+                // quick response info found
                 if ($quickInfo) {
                     syslog(LOG_INFO, "Quick Response.");
+
                     //make quick response
                     switch ($quickInfo['type']) {
                         case 'html':
@@ -54,107 +61,147 @@ class handler {
                             Output::echoTxtFile($quickInfo['content']);
                             break;
                     }
-
-                    return true;
                 }
-            }
 
-            $postJSON = Input::fetchPostInfoFromCache($postParam);
-            !$postJSON && ($postJSON = Input::queryTumblrApi($postParam));
-            if (!$postJSON) {
-                $postParam = false; //don't write quick response
-                $errMsg = 'No post info back from Tumblr.';
-                throw new Exception($errMsg);
-            } else {
-                //save post info to memcached
-                Output::writePostInfoToCache($postParam, $postJSON);
-            }
+                // no quick response found, we got to process it
+                else {
+                    $postJSON = Input::fetchPostInfoFromCache($postParam);
+                    $postJSON = $postJSON ? $postJSON : Input::queryTumblrApi($postParam);
 
-            $postInfo = $postJSON['posts'][0];
-            $postType = Content::parsePostType($postInfo);
-            $parserName = 'parse' . ucfirst($postType);
+                    // post json gotten
+                    if ($postJSON) {
 
-            switch ($postType) {
-                case 'answer':
-                case 'link':
-                case 'regular':
-                case 'quote':
-                    $output = Content::$parserName($postInfo);
-                    Output::echoHtmlFile($output);
-                    $recordForNextTime = array(
-                        'type' => 'html',
-                        'content' => $output
-                    );
-                    break;
-                case 'video':
-                    $output = Content::$parserName($postInfo);
-                    if (!$output) {
-                        $errMsg = "Can't not parse video post, maybe it's too complicated to get the video source out.";
-                        throw new Exception($errMsg);
-                    } else {
-                        Output::redirect($output);
-                        $recordForNextTime = array(
-                            'type' => 'video',
-                            'content' => $output
-                        );
-                    }
-                    break;
-                case 'unknow':
-                case 'photo':
-                default:
-                    $photoUrls = Content::$parserName($postInfo);
-                    $photoCount = count($photoUrls);
+                        //save post info to memcached
+                        Output::writePostInfoToCache($postParam, $postJSON);
 
-                    if ($photoCount === 0) {
+                        $postInfo = $postJSON['posts'][0];
+                        $postType = Content::parsePostType($postInfo);
+                        $parserName = 'parse' . ucfirst($postType);
 
-                        $errMsg = "No images found in the tumblr post.";
-                        throw new Exception($errMsg);
+                        switch ($postType) {
+                            case 'answer':
+                            case 'link':
+                            case 'regular':
+                            case 'quote':
+                                $output = Content::$parserName($postInfo);
+                                Output::echoHtmlFile($output);
+                                $recordForNextTime = array(
+                                    'type' => 'html',
+                                    'content' => $output
+                                );
+                                break;
+                            case 'video':
+                                $output = Content::$parserName($postInfo);
 
-                    } elseif ($photoCount === 1) {
-                        Output::redirect($photoUrls[0]);
+                                // video source parsed
+                                if ($output) {
+                                    Output::redirect($output);
+                                    $recordForNextTime = array(
+                                        'type' => 'video',
+                                        'content' => $output
+                                    );
+                                }
 
-                        $recordForNextTime = array(
-                            'type' => 'singlePhoto',
-                            'content' => $photoUrls[0]
-                        );
+                                // no video parsed
+                                else {
+                                    $errMsg = "Can't not parse video post, maybe it's too complicated to get the video source out.";
+                                    throw new Exception($errMsg);
+                                }
+                                break;
+                            case 'unknow':
+                            case 'photo':
+                            default:
+                                $photoUrls = Content::$parserName($postInfo);
+                                $photoCount = count($photoUrls);
 
-                    } else {
+                                // photo found
+                                if ($photoCount > 0) {
+                                    // one photo
+                                    if ($photoCount === 1) {
+                                        Output::redirect($photoUrls[0]);
 
-                        $imagesFromCache = Input::fetchImagesFromCache($photoUrls);
+                                        $recordForNextTime = array(
+                                            'type' => 'singlePhoto',
+                                            'content' => $photoUrls[0]
+                                        );
+                                    }
 
-                        $total = count($photoUrls);
-                        $cached = count($imagesFromCache);
-                        $fetched = 0;
-                        $startTime = microtime(true);
+                                    // multi photo
+                                    else {
+                                        $imagesFromCache = Input::fetchImagesFromCache($photoUrls);
 
-                        $images = array_fill_keys($photoUrls, null);
-                        $randomUrls = array_values($photoUrls);
-                        shuffle($randomUrls);
-                        foreach ($randomUrls as $photoUrl) {
-                            $fileName = basename($photoUrl);
-                            if (isset($imagesFromCache[$fileName])) {
-                                $images[$photoUrl] = &$imagesFromCache[$fileName];
-                            } else {
-                                $images[$photoUrl] = Input::fetchImageFromNetwork($photoUrl);
-                                $fetched++;
-                                static::$mc->singleSet($fileName, $images[$photoUrl]);
-                            }
+                                        // survey variables
+                                        {
+                                            $total = count($photoUrls);
+                                            $cached = count($imagesFromCache);
+                                            $fetched = 0;
+                                            $startTime = microtime(true);
+                                        }
+
+                                        // get images
+                                        $imagesContainer = array_fill_keys($photoUrls, null);
+                                        $randomOrder = array_values($photoUrls); shuffle($randomOrder);
+                                        foreach ($randomOrder as $imgUrl) {
+                                            $fileName = basename($imgUrl);
+
+                                            // image in cache found
+                                            if (isset($imagesFromCache[$fileName])) {
+                                                $imagesContainer[$imgUrl] = &$imagesFromCache[$fileName];
+                                            }
+
+                                            // not in cache
+                                            else {
+                                                $imagesContainer[$imgUrl] = Input::fetchImageFromNetwork($imgUrl); // fetch from network
+                                                static::$mc->singleSet($fileName, $imagesContainer[$imgUrl]); // write to cache
+
+                                                $fetched++;
+                                            }
+                                        }
+
+                                        // output
+                                        $zipPack = Content::getImagesZipPack($imagesContainer);
+                                        Output::echoZipFile($zipPack);
+
+                                        // survey record
+                                        $timeUsed = number_format(microtime(true) - $startTime, 3, '.', '');
+                                        syslog(LOG_INFO, "Total: $total, From cache: $cached, From network: $fetched, Time used: {$timeUsed}s");
+
+                                        // refresh cache
+                                        static::$mc->touchKeys(array_keys($imagesFromCache));
+                                        //Output::writeImagesToCache($images, array_keys($imagesFromCache));
+                                    }
+                                }
+
+                                // no photo found
+                                else {
+                                    $errMsg = "No images found in the tumblr post.";
+                                    throw new Exception($errMsg);
+                                }
+
+                                break;
                         }
 
-                        $zipPack = Content::getImagesZipPack($images);
-                        Output::echoZipFile($zipPack);
-
-                        $timeUsed = number_format(microtime(true) - $startTime, 3, '.', '');
-                        syslog(LOG_INFO, "Total: $total, From cache: $cached, From network: $fetched, Time used: {$timeUsed}s");
-
-                        static::$mc->touchKeys(array_keys($imagesFromCache));
-                        //Output::writeImagesToCache($images, array_keys($imagesFromCache));
                     }
-                    break;
+
+                    // not post json back from tumblr
+                    else {
+                        $postParam = false; //don't write quick response
+                        $errMsg = 'No post info back from Tumblr.';
+                        throw new Exception($errMsg);
+                    }
+                }
 
             }
 
-        } catch (Exception $e) {
+            // not a valid tumblr url
+            else {
+                $errMsg = "Not a valid tumblr URL.";
+                throw new Exception($errMsg);
+            }
+
+        }
+        // catch error, generate and output error record
+        catch (Exception $e) {
 
             $errText = Content::getErrorText($e->getMessage());
 
@@ -165,11 +212,9 @@ class handler {
 
             Output::echoTxtFile($errText);
 
-        } finally {
-
-            $postParam && $recordForNextTime && Output::writeQuickResponseInfoToCache($postParam, $recordForNextTime);
-
         }
+        // write error record or quick response
+        finally {$postParam && $recordForNextTime && Output::writeQuickResponseInfoToCache($postParam, $recordForNextTime);}
 
         return true;
     }
