@@ -97,6 +97,16 @@ EOD;
         return ob_get_clean();
     }
 
+    public static function getHtmlZipPack($htmlStr, $fileName = null) {
+        require_once('zip.lib.php');
+        $zip = new ZipFile();
+
+        $fileName = $fileName ? $fileName : date('Y-M-j-D-G-i-s') . '.htm';
+        $zip->addFile($htmlStr, $fileName);
+
+        return $zip->file();
+    }
+
     public static function getImagesZipPack(&$images) {
         require_once('zip.lib.php');
         $zip = new ZipFile();

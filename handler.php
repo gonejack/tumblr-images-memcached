@@ -57,6 +57,9 @@ class handler {
                         case 'singlePhoto':
                             Output::redirect($quickInfo['content']);
                             break;
+                        case 'htmlZip':
+                            Output::echoZipFile($quickInfo['content']);
+                            break;
                         case 'error':
                             Output::echoTxtFile($quickInfo['content']);
                             break;
@@ -175,11 +178,13 @@ class handler {
 
                                         // to make a download page
                                         else {
-                                            $output = Content::getImagesDownloadPage($photoUrls);
-                                            Output::echoHtmlFile($output);
+                                            $page = Content::getImagesDownloadPage($photoUrls);
+                                            $zipStr = Content::getHtmlZipPack($page);
+
+                                            Output::echoZipFile($zipStr);
                                             $recordForNextTime = array(
-                                                'type' => 'html',
-                                                'content' => $output
+                                                'type' => 'htmlZip',
+                                                'content' => $zipStr
                                             );
                                         }
                                     }
