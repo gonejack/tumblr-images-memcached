@@ -46,6 +46,14 @@ class ZipFile
      */
     var $old_offset = 0;
 
+    var $compressLevel = -1;
+
+    function __construct($nocompress = false) {
+        if ($nocompress) {
+            $this->compressLevel = 0;
+        }
+    }
+
     /**
      * Sets member variable this -> doWrite to true
      * - Should be called immediately after class instantiation
@@ -85,7 +93,7 @@ class ZipFile
         // "local file header" segment
         $unc_len = strlen($data);
         $crc     = crc32($data);
-        $zdata   = gzcompress($data, 0);
+        $zdata   = gzcompress($data, $this->compressLevel);
         $zdata   = substr(substr($zdata, 0, strlen($zdata) - 4), 2); // fix crc bug
         $c_len   = strlen($zdata);
         $fr .= pack('V', $crc);             // crc32

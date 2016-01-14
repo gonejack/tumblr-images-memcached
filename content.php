@@ -109,7 +109,7 @@ EOD;
 
     public static function getImagesZipPack(&$images) {
         require_once('zip.lib.php');
-        $zip = new ZipFile();
+        $zip = new ZipFile(true);
 
         foreach ($images as $url => &$image) {
             if ($image) {
