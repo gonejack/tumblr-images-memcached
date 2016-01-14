@@ -53,12 +53,12 @@
 <div id="content">
 <?php foreach ($imageUrls as $url) { ?>
     <figure>
-        <a href="<?php echo $url?>" download="<?php echo basename($url) ?>"><img src="<?php echo $url?>""></a>
+        <a href="<?php echo $url?>" download="<?php echo basename($url) ?>" title="Use Google Chrome browser if any trouble happened."><img src="<?php echo $url?>""></a>
         <figcaption><a href="<?php echo $url?>" download="<?php echo basename($url) ?>">Download</a></figcaption>
     </figure>
 <?php } ?>
 </div>
-<button id="downButton" title="Download All">Download All</button>
+<button id="downButton" title="Only tested on Google Chrome, switch to Google Chrome browser if any trouble happened.">Download All</button>
 <script>
     var button = document.getElementById('downButton');
     button.style.display = 'none';

@@ -43,5 +43,5 @@ if (isset($_GET['url'])) {
 }
 
 else {
-    echo 'hello world';
+    echo 'Hello Tumblr!!';
 }
