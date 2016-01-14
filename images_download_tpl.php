@@ -54,7 +54,7 @@
 <?php foreach ($imageUrls as $url) { ?>
     <figure>
         <a href="<?php echo $url?>" download="<?php echo basename($url) ?>" title="Use Google Chrome browser if any trouble happened."><img src="<?php echo $url?>""></a>
-        <figcaption><a href="<?php echo $url?>" download="<?php echo basename($url) ?>">Download</a></figcaption>
+        <figcaption><a href="<?php echo $url?>" download="<?php echo basename($url) ?>" title="Use Google Chrome browser if any trouble happened.">Download</a></figcaption>
     </figure>
 <?php } ?>
 </div>
