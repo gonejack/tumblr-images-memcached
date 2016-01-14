@@ -91,6 +91,12 @@ EOD;
         return $errText;
     }
 
+    public static function getImagesDownloadPage($imageUrls){
+        ob_start();
+        include_once('images_download_tpl.php');
+        return ob_get_clean();
+    }
+
     public static function getImagesZipPack(&$images) {
         require_once('zip.lib.php');
         $zip = new ZipFile();

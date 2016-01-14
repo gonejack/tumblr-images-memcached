@@ -32,7 +32,7 @@ class handler {
         }
     }
 
-    public static function handle($url) {
+    public static function handle($url, $makePack = false) {
 
         $postParam = static::parseUrlParam($url);
         $recordForNextTime = null;
@@ -127,47 +127,61 @@ class handler {
 
                                     // multi photo
                                     else {
-                                        $imagesFromCache = Input::fetchImagesFromCache($photoUrls);
 
-                                        // survey variables
-                                        {
-                                            $total = count($photoUrls);
-                                            $cached = count($imagesFromCache);
-                                            $fetched = 0;
-                                            $startTime = microtime(true);
-                                        }
+                                        // to make a zip pack
+                                        if ($makePack) {
+                                            $imagesFromCache = Input::fetchImagesFromCache($photoUrls);
 
-                                        // get images
-                                        $imagesContainer = array_fill_keys($photoUrls, null);
-                                        $randomOrder = array_values($photoUrls); shuffle($randomOrder);
-                                        foreach ($randomOrder as $imgUrl) {
-                                            $fileName = basename($imgUrl);
-
-                                            // image in cache found
-                                            if (isset($imagesFromCache[$fileName])) {
-                                                $imagesContainer[$imgUrl] = &$imagesFromCache[$fileName];
+                                            // survey variables
+                                            {
+                                                $total = count($photoUrls);
+                                                $cached = count($imagesFromCache);
+                                                $fetched = 0;
+                                                $startTime = microtime(true);
                                             }
 
-                                            // not in cache
-                                            else {
-                                                $imagesContainer[$imgUrl] = Input::fetchImageFromNetwork($imgUrl); // fetch from network
-                                                $imagesContainer[$imgUrl] && static::$mc->singleSet($fileName, $imagesContainer[$imgUrl]); // write to cache
+                                            // get images
+                                            $imagesContainer = array_fill_keys($photoUrls, null);
+                                            $randomOrder = array_values($photoUrls); shuffle($randomOrder);
+                                            foreach ($randomOrder as $imgUrl) {
+                                                $fileName = basename($imgUrl);
 
-                                                $fetched++;
+                                                // image in cache found
+                                                if (isset($imagesFromCache[$fileName])) {
+                                                    $imagesContainer[$imgUrl] = &$imagesFromCache[$fileName];
+                                                }
+
+                                                // not in cache
+                                                else {
+                                                    $imagesContainer[$imgUrl] = Input::fetchImageFromNetwork($imgUrl); // fetch from network
+                                                    $imagesContainer[$imgUrl] && static::$mc->singleSet($fileName, $imagesContainer[$imgUrl]); // write to cache
+
+                                                    $fetched++;
+                                                }
                                             }
+
+                                            // output
+                                            $zipPack = Content::getImagesZipPack($imagesContainer);
+                                            Output::echoZipFile($zipPack);
+
+                                            // survey record
+                                            $timeUsed = number_format(microtime(true) - $startTime, 3, '.', '');
+                                            syslog(LOG_INFO, "Total: $total, From cache: $cached, From network: $fetched, Time used: {$timeUsed}s");
+
+                                            // refresh cache
+                                            static::$mc->touchKeys(array_keys($imagesFromCache));
+                                            //Output::writeImagesToCache($images, array_keys($imagesFromCache));
                                         }
 
-                                        // output
-                                        $zipPack = Content::getImagesZipPack($imagesContainer);
-                                        Output::echoZipFile($zipPack);
-
-                                        // survey record
-                                        $timeUsed = number_format(microtime(true) - $startTime, 3, '.', '');
-                                        syslog(LOG_INFO, "Total: $total, From cache: $cached, From network: $fetched, Time used: {$timeUsed}s");
-
-                                        // refresh cache
-                                        static::$mc->touchKeys(array_keys($imagesFromCache));
-                                        //Output::writeImagesToCache($images, array_keys($imagesFromCache));
+                                        // to make a download page
+                                        else {
+                                            $output = Content::getImagesDownloadPage($photoUrls);
+                                            Output::echoHtmlFile($output);
+                                            $recordForNextTime = array(
+                                                'type' => 'html',
+                                                'content' => $output
+                                            );
+                                        }
                                     }
                                 }
 
