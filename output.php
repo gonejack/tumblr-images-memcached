@@ -34,8 +34,8 @@ class Output {
      * @return bool
      */
     public static function echoHtmlFile($content) {
-        header('Content-Type: text/htm');
-        header('Content-Disposition: attachment; filename=' . date('Y-M-j-D-G-i-s') . '.htm');
+        header('Content-Type: text/html');
+        header('Content-Disposition: attachment; filename=' . date('Y-M-j-D-G-i-s') . '.html');
 
         echo $content;
 
