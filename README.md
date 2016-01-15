@@ -15,7 +15,7 @@
   gcloud preview app deploy ./app.yaml --promote
   （如果你需要图片打包下载，请在cd tumblr-images-memcached后敲命令nano handler.php，然后找到$makePack = false改为$makePack = true，再按ctrl + o保存，ctrl + x 退出编辑，再去敲接下来的命令）
   ```
-5、好了，你的服务器完成了，访问一下应用的地址(上面命令输出信息中会告诉你的)试试，如果会输出hello信息，就可以去配置ifttt去了。
+5、好，你的服务器完成。访问一下应用的地址(上面命令输出信息中会告诉你的)试试，如果会输出hello信息，就可以去配置IFTTT了。
 
 有什么问题，可以邮件联系。
 
@@ -33,6 +33,6 @@ Server being overload all the time, got to cancel the zip packing for images, Tu
   gcloud preview app deploy ./app.yaml --promote
   (if you need zip packing, enter one more command after 'cd tumblr-images-memcached', 'nano handler.php'. Find the $makePack = false, edit it to $makePack = true. CTRL+O to save, CTRL+X to exit the editor, and go ahead typing)
   ```
-5. Go to the URL that command prompt you, if there are something like 'hello', you are good to go for configuring ifttt.
+5. Go to the URL that command prompt you, if there are something like 'hello', you are good to go for configuring IFTTT.
 
-Contact me with email if you got into trouble.
+Contact me with email if you run into trouble.
