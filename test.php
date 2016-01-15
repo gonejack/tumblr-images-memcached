@@ -23,4 +23,8 @@ $photoUrls = array(
 
 $page = getImagesDownloadPage($photoUrls);
 
-file_put_contents('images.html', $page);
+//file_put_contents('images.html', $page);
+
+echo strlen($page), "\n";
+echo strlen(gzcompress($page, -1)), "\n";
+echo strlen(gzcompress($page, 9));

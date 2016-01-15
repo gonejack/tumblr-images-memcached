@@ -19,11 +19,12 @@
 
 有什么问题，可以邮件联系。
 
+
 Server being overload all the time, got to cancel the zip packing for images, Tutorial below for you to build your own server and turn on zip packing.
 
 1. Register Google App Engine.
 2. Create an app, when finished, enter https://console.developers.google.com.
-3. Switch to your app by right up corner, and click Active Google Cloud Shell.
+3. Switch to your app at right top corner, click Active Google Cloud Shell.
 4. On the command line interface:
 
   ```
