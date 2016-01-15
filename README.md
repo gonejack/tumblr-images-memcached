@@ -19,18 +19,19 @@
 
 有什么问题，可以邮件联系。
 
-Server overload all the time, got to cancel the zip packing for images, tutorial for you to build your own server and turn on zip packing.
+Server being overload all the time, got to cancel the zip packing for images, Tutorial below for you to build your own server and turn on zip packing.
 
-1. register Google App Engine.
-2. create an app, when finished, enter https://console.developers.google.com.
-3. switch to your app by right up corner, and click Active Google Cloud Shell.
-4. on the command line interface:
+1. Register Google App Engine.
+2. Create an app, when finished, enter https://console.developers.google.com.
+3. Switch to your app by right up corner, and click Active Google Cloud Shell.
+4. On the command line interface:
 
   ```
   git clone https://github.com/gonejack/tumblr-images-memcached.git
   cd tumblr-images-memcached
   gcloud preview app deploy ./app.yaml --promote
-  (if you need zip packing, enter one more command after 'cd tumblr-images-memcached', 'nano handler.php', find the $makePack = false, edit it to $makePack = true. ctrl+o to save, ctrl+x to exit the editor. and go ahead)
+  (if you need zip packing, enter one more command after 'cd tumblr-images-memcached', 'nano handler.php'. Find the $makePack = false, edit it to $makePack = true. CTRL+O to save, CTRL+X to exit the editor, and go ahead typing)
   ```
+5. Go to the URL that command prompt you, if there are something like 'hello', you are good to go for configuring ifttt.
 
-5. go to to url that command prompt you, and if you see something like 'hello', you are good to go for configuring ifttt.
+Contact me with email if you got into trouble.
