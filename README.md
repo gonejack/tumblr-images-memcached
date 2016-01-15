@@ -25,10 +25,12 @@ Server overload all the time, got to cancel the zip packing for images, tutorial
 2. create an app, when finished, enter https://console.developers.google.com.
 3. switch to your app by right up corner, and click Active Google Cloud Shell.
 4. on the command line interface:
+
   ```
   git clone https://github.com/gonejack/tumblr-images-memcached.git
   cd tumblr-images-memcached
   gcloud preview app deploy ./app.yaml --promote
   (if you need zip packing, enter one more command after 'cd tumblr-images-memcached', 'nano handler.php', find the $makePack = false, edit it to $makePack = true. ctrl+o to save, ctrl+x to exit the editor. and go ahead)
   ```
+
 5. go to to url that command prompt you, and if you see something like 'hello', you are good to go for configuring ifttt.
