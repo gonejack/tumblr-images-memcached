@@ -59,11 +59,16 @@ EOD;
         if ($video_info = unserialize($video_source)) {
             $video_info = $video_info['o1'];
             $video_id   = substr($video_info['video_preview_filename_prefix'], 0, -1);
-
-            return "http://vt.tumblr.com/$video_id.mp4";
+            if ($video_id) {
+                return "http://vt.tumblr.com/$video_id.mp4";
+            }
         }
 
         if (preg_match('<src="(.+?)">', $video_source, $match)) {
+            return $match[1];
+        }
+
+        if (isset($post_info['video-player']) && preg_match('<src="(.+?)">', $post_info['video-player'], $match)) {
             return $match[1];
         }
 
