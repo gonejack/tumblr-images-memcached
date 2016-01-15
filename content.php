@@ -103,6 +103,8 @@ EOD;
 
         $fileName = $fileName ? $fileName : date('Y-M-j-D-G-i-s') . '.htm';
         $zip->addFile($htmlStr, $fileName);
+        $txt = "Server overload, images packing canceled, Use Google Chrome to open the htm file.\r\n服务器扛不住，取消图片打包，请使用谷歌浏览器打开htm文件自行下载，靴靴";
+        $zip->addFile($txt, 'Use_Google_Chrome_to_open_htm.txt');
 
         return $zip->file();
     }
