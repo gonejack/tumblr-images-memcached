@@ -14,8 +14,9 @@
   git clone https://github.com/gonejack/tumblr-images-memcached.git
   cd tumblr-images-memcached
   gcloud preview app deploy ./app.yaml --promote
+  （如果你需要图片打包下载，请在cd tumblr-images-memcached后敲命令nano handler.php，然后找到$makePack = false改为$makePack = true，再按ctrl + o保存，ctrl + x 退出编辑，再去敲接下来的命令）
   ```
   
-5、好了，你的服务器完成了，访问一下应用的地址(上面命令输出信息中会告诉你的)试试。
+5、好了，你的服务器完成了，访问一下应用的地址(上面命令输出信息中会告诉你的)试试，如果会输出hello信息，就可以去配置ifttt去了。
 
-（如果你需要图片打包下载，请在cd tumblr-images-memcached后敲命令nano handler.php，然后找到$makePack = false改为$makePack = true，再按ctrl + o保存，ctrl + x 退出编辑，再去敲接下来的命令）
+
