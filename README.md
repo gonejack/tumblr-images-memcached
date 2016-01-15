@@ -4,9 +4,9 @@
 
 1、注册Google App Engine。
 
-2、创建一个GAE应用。
+2、创建一个应用。
 
-3、进入应用的控制台，点击右上角的Active Google Cloud Shell。
+3、进入https://console.developers.google.com，右上角切换到你创建的应用，再点击旁边的Active Google Cloud Shell。
 
 4、在弹出来的命令行界面敲下面3条命令：
 
@@ -19,4 +19,4 @@
   
 5、好了，你的服务器完成了，访问一下应用的地址(上面命令输出信息中会告诉你的)试试，如果会输出hello信息，就可以去配置ifttt去了。
 
-
+有什么问题，可以邮件联系。
