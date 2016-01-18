@@ -42,7 +42,7 @@ class Content {
 
         $output = "$conversation_text\r\n$date\r\n$tags\r\n$url";
 
-        return $output;
+        return nl2br($output);
     }
 
     public static function parseLink($postInfo) {
