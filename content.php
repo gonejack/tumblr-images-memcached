@@ -58,8 +58,8 @@ EOD;
         $video_source = $post_info['video-source'];
         if ($video_info = unserialize($video_source)) {
             $video_info = $video_info['o1'];
-            $video_id   = substr($video_info['video_preview_filename_prefix'], 0, -1);
-            if ($video_id) {
+            if (isset($video_info['video_preview_filename_prefix'])) {
+                $video_id   = substr($video_info['video_preview_filename_prefix'], 0, -1);
                 return "http://vt.tumblr.com/$video_id.mp4";
             }
         }
