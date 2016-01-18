@@ -31,6 +31,20 @@ class Content {
         return htmlspecialchars($output);
     }
 
+    public static function parseConversation($postInfo) {
+        $conversation_text = '';
+        foreach ($postInfo['conversation'] as $item) {
+            $conversation_text .= "{$item['label']} {$item['phrase']}\r\n";
+        }
+        $date = "date: {$postInfo['date']}";
+        $url  = "url: {$postInfo['url']}";
+        $tags = 'tags: ' . implode(', ', isset($postInfo['tags']) ? $postInfo['tags'] : array());
+
+        $output = "$conversation_text\r\n$date\r\n$tags\r\n$url";
+
+        return $output;
+    }
+
     public static function parseLink($postInfo) {
         $output = <<< EOD
                         <p>Title: <h3>{$postInfo['link-text']}</h3></p>
@@ -102,14 +116,16 @@ EOD;
         return ob_get_clean();
     }
 
-    public static function getHtmlZipPack($htmlStr, $fileName = null) {
+    public static function getHtmlZipPack($htmlStr, $fileName = null, $readmeText = null) {
         require_once('zip.lib.php');
         $zip = new ZipFile();
 
         $fileName = $fileName ? $fileName : date('Y-M-j-D-G-i-s') . '.htm';
         $zip->addFile($htmlStr, $fileName);
-        $txt = "Server overload, images packing canceled, Use Google Chrome to open the htm file.\r\n服务器扛不住，取消图片打包，请使用谷歌浏览器打开htm文件自行下载，靴靴";
-        $zip->addFile($txt, 'Use_Google_Chrome_to_open_htm.txt');
+
+        if ($readmeText) {
+            $zip->addFile($readmeText, 'readme.txt');
+        }
 
         return $zip->file();
     }

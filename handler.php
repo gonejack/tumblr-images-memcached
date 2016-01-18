@@ -82,14 +82,17 @@ class handler {
 
                         switch ($postType) {
                             case 'answer':
+                            case 'conversation':
                             case 'link':
                             case 'regular':
                             case 'quote':
                                 $output = Content::$parserName($postInfo);
-                                Output::echoHtmlFile($output);
+                                $zipStr = Content::getHtmlZipPack($output);
+                                Output::echoZipFile($zipStr);
+
                                 $recordForNextTime = array(
-                                    'type' => 'html',
-                                    'content' => $output
+                                    'type' => 'htmlZip',
+                                    'content' => $zipStr
                                 );
                                 break;
                             case 'video':
@@ -179,7 +182,8 @@ class handler {
                                         // to make a download page
                                         else {
                                             $page = Content::getImagesDownloadPage($photoUrls);
-                                            $zipStr = Content::getHtmlZipPack($page);
+                                            $readme = "Server overload, images packing canceled, Use Google Chrome to open the htm file.\r\n服务器扛不住，取消图片打包，请使用谷歌浏览器打开htm文件自行下载，靴靴";
+                                            $zipStr = Content::getHtmlZipPack($page, null, $readme);
 
                                             Output::echoZipFile($zipStr);
                                             $recordForNextTime = array(
