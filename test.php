@@ -21,7 +21,7 @@ $photoUrls = array(
     'https://36.media.tumblr.com/2086f0fd4ebfa9763092c570bc678a2d/tumblr_o0xdkcLqKS1uroj0po1_540.jpg',
 );
 
-$page = getImagesDownloadPage($photoUrls);
+echo $page = getImagesDownloadPage($photoUrls);
 
 //file_put_contents('images.html', $page);
 

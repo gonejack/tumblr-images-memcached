@@ -51,12 +51,22 @@
 </head>
 <body>
 <div id="content">
-<?php foreach ($imageUrls as $url) { ?>
+<?php
+    foreach ($imageUrls as $url) {
+        $fileName = basename($url);
+        echo <<<EOD
     <figure>
-        <a href="<?php echo $url?>" download="<?php echo basename($url) ?>" title="Use Google Chrome browser if any trouble happened."><img src="<?php echo $url?>""></a>
-        <figcaption><a href="<?php echo $url?>" download="<?php echo basename($url) ?>" title="Use Google Chrome browser if any trouble happened.">Download</a></figcaption>
+        <a href="$url" download="$fileName" title="Use Google Chrome browser if any trouble happened.">
+            <img src="$url">
+        </a>
+        <figcaption>
+            <a href="$url" download="$fileName" title="Use Google Chrome browser if any trouble happened.">Download</a>
+        </figcaption>
     </figure>
-<?php } ?>
+
+EOD;
+    }
+?>
 </div>
 <button id="downButton" title="Only tested on Google Chrome, switch to Google Chrome browser if any trouble happened.">Download All</button>
 <script>
