@@ -81,6 +81,7 @@ class handler {
                         $parserName = 'parse' . ucfirst($postType);
 
                         switch ($postType) {
+                            case 'audio':
                             case 'answer':
                             case 'conversation':
                             case 'link':

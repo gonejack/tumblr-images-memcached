@@ -68,6 +68,18 @@ EOD;
         return $output;
     }
 
+    public static function parseAudio($post_info) {
+        $html = '';
+
+        if (isset($post_info['audio-caption']))
+            $html .= $post_info['audio-caption'];
+
+        if (isset($post_info['audio-embed']))
+            $html .= $post_info['audio-embed'];
+
+        return $html;
+    }
+
     public static function parseVideo($post_info) {
         $video_source = $post_info['video-source'];
         if ($video_info = unserialize($video_source)) {
