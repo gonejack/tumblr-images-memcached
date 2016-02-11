@@ -27,9 +27,9 @@ class handler {
                 'post_domain' => $match[1],
                 'post_id'     => $match[2]
             );
-        } else {
-            return false;
         }
+
+        else return false;
     }
 
     public static function handle($url, $makePack = false) {
@@ -237,7 +237,10 @@ class handler {
 
         }
         // write error record or quick response
-        finally {$postParam && $recordForNextTime && Output::writeQuickResponseInfoToCache($postParam, $recordForNextTime);}
+        finally {
+            if ($postParam && $recordForNextTime)
+                Output::writeQuickResponseInfoToCache($postParam, $recordForNextTime);
+        }
 
         return true;
     }

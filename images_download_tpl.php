@@ -75,8 +75,8 @@ EOD;
     button.addEventListener('click', function () {
         function baseName(str) {
             var base = str.substring(str.lastIndexOf('/') + 1);
-            if(base.lastIndexOf(".") != -1)
-                base = base.substring(0, base.lastIndexOf("."));
+            if(base.lastIndexOf('.') !== -1)
+                base = base.substring(0, base.lastIndexOf('.'));
             return base;
         }
 

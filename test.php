@@ -27,3 +27,6 @@ $photoUrls = array(
 //echo strlen($page), "\n";
 //echo strlen(gzcompress($page, -1)), "\n";
 //echo strlen(gzcompress($page, 9));
+
+'' ?: $abc = 100;
+echo $abc;
