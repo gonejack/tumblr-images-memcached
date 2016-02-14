@@ -71,7 +71,6 @@ EOD;
 <button id="downButton" title="Only tested on Google Chrome, switch to Google Chrome browser if any trouble happened.">Download All</button>
 <script>
     var button = document.getElementById('downButton');
-    button.style.display = 'none';
 
     button.onclick = function () {
         var downATags = document.querySelectorAll('a.downA');
@@ -81,6 +80,7 @@ EOD;
         while (i++ < downATags.length);
     };
 
+    button.style.display = 'none';
     window.onload = function () { button.style.display = 'block'; };
 </script>
 </body>
