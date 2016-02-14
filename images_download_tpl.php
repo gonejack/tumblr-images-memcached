@@ -74,15 +74,14 @@ EOD;
     button.style.display = 'none';
 
     button.onclick = function () {
-        var downATags = document.querySelectorAll('a.downA'), i = 0;
-        while (i < downATags.length) {
-            downATags[i++].click();
-        }
+        var downATags = document.querySelectorAll('a.downA');
+        var i = 0;
+        do
+            downATags[i].click();
+        while (i++ < downATags.length);
     };
 
-    window.onload = function () {
-        button.style.display = 'block';
-    };
+    window.onload = function () { button.style.display = 'block'; };
 </script>
 </body>
 
