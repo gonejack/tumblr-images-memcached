@@ -32,8 +32,6 @@
             color: darkslateblue;
         }
         button {
-            display: block;
-            float: right;
             position: fixed;
             right: 50px;
             bottom: 35px;
