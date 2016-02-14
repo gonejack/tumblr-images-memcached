@@ -21,12 +21,12 @@ $photoUrls = array(
     'https://36.media.tumblr.com/2086f0fd4ebfa9763092c570bc678a2d/tumblr_o0xdkcLqKS1uroj0po1_540.jpg',
 );
 
-//echo $page = getImagesDownloadPage($photoUrls);
-//file_put_contents('images.html', $page);
+echo $page = getImagesDownloadPage($photoUrls);
+file_put_contents('images.html', $page);
 
 //echo strlen($page), "\n";
 //echo strlen(gzcompress($page, -1)), "\n";
 //echo strlen(gzcompress($page, 9));
 
-'' ?: $abc = 100;
-echo $abc;
+//'' ?: $abc = 100;
+//echo $abc;

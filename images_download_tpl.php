@@ -60,7 +60,7 @@
             <img src="$url">
         </a>
         <figcaption>
-            <a href="$url" download="$fileName" title="Use Google Chrome browser if any trouble happened.">Download</a>
+            <a href="$url" download="$fileName" class="downA" title="Use Google Chrome browser if any trouble happened.">Download</a>
         </figcaption>
     </figure>
 
@@ -72,39 +72,17 @@ EOD;
 <script>
     var button = document.getElementById('downButton');
     button.style.display = 'none';
-    button.addEventListener('click', function () {
-        function baseName(str) {
-            var base = str.substring(str.lastIndexOf('/') + 1);
-            if(base.lastIndexOf('.') !== -1)
-                base = base.substring(0, base.lastIndexOf('.'));
-            return base;
+
+    button.onclick = function () {
+        var downATags = document.querySelectorAll('a.downA'), i = 0;
+        while (i < downATags.length) {
+            downATags[i++].click();
         }
+    };
 
-        var tempA = document.createElement('a');
-        var imgs = document.getElementsByTagName('img');
-        for (var i = 0, l = imgs.length; i < l; i++) {
-            var img = imgs[i];
-
-            tempA.setAttribute('href', img.src);
-            tempA.setAttribute('download', baseName(img.src));
-            tempA.click();
-
-        }
-    });
-
-    var images = document.getElementsByTagName('img');
-    var imagesTotalCount = images.length;
-    var imagesLoadedCount = 0;
-
-    for (var i = 0; i < imagesTotalCount; i++) {
-        var img = images[i];
-        img.onload = function () {
-            imagesLoadedCount++;
-            if (imagesLoadedCount === imagesTotalCount) {
-                button.style.display = 'block';
-            }
-        }
-    }
+    window.onload = function () {
+        button.style.display = 'block';
+    };
 </script>
 </body>
 
