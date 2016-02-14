@@ -183,7 +183,7 @@ class handler {
                                         // to make a download page
                                         else {
                                             $page = Content::getImagesDownloadPage($photoUrls);
-                                            $readme = "Server overload, images packing canceled, Use Google Chrome to open the htm file.\r\n服务器扛不住，取消图片打包，请使用谷歌浏览器打开htm文件自行下载，靴靴";
+                                            $readme = "Sever overloading all the time so no more images packing, open the html file with google chrome and download images manually thank you.\r\n服务器扛不住，取消图片打包，请使用谷歌浏览器打开htm文件自行下载，靴靴。";
                                             $zipStr = Content::getHtmlZipPack($page, null, $readme);
 
                                             Output::echoZipFile($zipStr);
