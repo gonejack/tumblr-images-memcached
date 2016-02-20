@@ -50,6 +50,7 @@
 <body>
 <div id="content">
 <?php
+    /** @var array $imageUrls */
     foreach ($imageUrls as $url) {
         $fileName = basename($url);
         echo <<<EOD
@@ -82,4 +83,3 @@ EOD;
     window.onload = function () { button.style.display = 'block'; };
 </script>
 </body>
-
