@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html>
 <head>
     <style>
         div#content {
@@ -49,7 +51,7 @@
 </head>
 <body>
 <div id="content">
-<?php
+    <?php
     /** @var array $imageUrls */
     foreach ($imageUrls as $url) {
         $fileName = basename($url);
@@ -65,7 +67,7 @@
 
 EOD;
     }
-?>
+    ?>
 </div>
 <button id="downButton" title="Only tested on Google Chrome, switch to Google Chrome browser if any trouble happened.">Download All</button>
 <script>
@@ -83,3 +85,4 @@ EOD;
     window.onload = function () { button.style.display = 'block'; };
 </script>
 </body>
+</html>
