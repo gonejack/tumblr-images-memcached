@@ -124,7 +124,7 @@ EOD;
 
     public static function getImagesDownloadPage($imageUrls){
         ob_start();
-        include_once('images_download_tpl.php');
+        include_once('images-download-tpl.php');
         return ob_get_clean();
     }
 

@@ -77,33 +77,33 @@ class Input {
     /**
      * fetch multi images from network
      * @param array $urls array of image urls
-     * @return array $images_pack  array('images' => array(image content strings), fileNames => array(image file names), 'count' => Number(successful fetch))
+     * @return array $imagesPack  array('images' => array(image content strings), fileNames => array(image file names), 'count' => Number(successful fetch))
      */
     public static function fetchImagesFromNetwork($urls) {
 
-        $images_pack = array('images' => array(), 'fileNames' => array(), 'count' => 0);
+        $imagesPack = array('images' => array(), 'fileNames' => array(), 'count' => 0);
 
-        $valid_status = array(200, 301, 304);
+        $validStatus = array(200, 301, 304);
 
         foreach ($urls as $url) {
 
-            $image_str = @file_get_contents($url);
+            $imagesStr = @file_get_contents($url);
 
             // fetched
-            if ($image_str !== false) {
+            if ($imagesStr !== false) {
                 $status = static::parseHeaders($http_response_header, 'status');
-                $available = in_array($status, $valid_status);
+                $available = in_array($status, $validStatus);
 
                 // available
                 if ($available) {
-                    $images_pack['images'][]    = $image_str;
-                    $images_pack['fileNames'][] = basename($url);
-                    $images_pack['count']++;
+                    $imagesPack['images'][]    = $imagesStr;
+                    $imagesPack['fileNames'][] = basename($url);
+                    $imagesPack['count']++;
                 }
             }
         }
 
-        return $images_pack;
+        return $imagesPack;
     }
 
     /**
@@ -124,11 +124,11 @@ class Input {
 
     /**
      * get from tumblr api and decode the json
-     * @param array $query_param array('post_domain' => 'xx.tumblr.com', 'post_id' => xxxx)
+     * @param array $queryParam array('post_domain' => 'xx.tumblr.com', 'post_id' => xxxx)
      * @return bool|mixed json array or false
      */
-    public static function queryTumblrApi($query_param) {
-        $apiUrl = "http://{$query_param['post_domain']}/api/read/json?id={$query_param['post_id']}";
+    public static function queryTumblrApi($queryParam) {
+        $apiUrl = "http://{$queryParam['post_domain']}/api/read/json?id={$queryParam['post_id']}";
 
         $i = 0;
         do {
