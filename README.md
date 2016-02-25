@@ -33,6 +33,6 @@ Server being overload all the time, got to cancel the zip packing for multi-imag
   (if you need zip packing, enter one more command after 'cd tumblr-images-memcached', 'nano main.php'. Find the $makePackForMultiImages = false, edit it to $makePackForMultiImages = true. CTRL+O to save and CTRL+X to exit the editor, go ahead typing)
   ```
 
-5. Go to the URL that command prompt you, if there are something like 'hello', you are good to go for configuring IFTTT.
+5. Go to the URL that command prompted you, if there something like 'hello' shows up, you are good to go for configuring IFTTT.
 
 Contact me with email if you run into trouble.
