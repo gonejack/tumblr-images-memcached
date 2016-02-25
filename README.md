@@ -19,7 +19,7 @@
 有什么问题，可以邮件联系。
 
 
-Server being overload all the time, got to cancel the zip packing for multi-images post, Tutorial below for you to build your own server and turn on zip packing.
+Server being overload all the time, got to cancel the zip packing for multi-images post, tutorial below for you to build your own server and turn on zip packing.
 
 1. Register Google App Engine.
 2. Create an app, when finished, enter https://console.developers.google.com.
