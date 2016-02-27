@@ -37,18 +37,18 @@ class handler {
         $postParam = static::parseUrlParam($url);
         $recordForNextTime = null;
 
-        // try to process it
+        # try to process it
         try {
 
-            // a valid tumblr url given
+            # a valid tumblr url given
             if ($postParam) {
                 $quickInfo = Input::fetchQuickResponseInfoFromCache($postParam);
 
-                // quick response info found
+                # quick response info found
                 if ($quickInfo) {
                     syslog(LOG_INFO, "Quick Response.");
 
-                    //make quick response
+                    # make quick response
                     switch ($quickInfo['type']) {
                         case 'html':
                             Output::echoHtmlFile($quickInfo['content']);
@@ -66,14 +66,14 @@ class handler {
                     }
                 }
 
-                // no quick response found, we got to process it
+                # no quick response found, we got to process it
                 else {
                     $postJSON = Input::fetchPostInfoFromCache($postParam) ?: Input::queryTumblrApi($postParam);
 
-                    // post json gotten
+                    # post json gotten
                     if ($postJSON) {
 
-                        //save post info to memcached
+                        # save post info to memcached
                         Output::writePostInfoToCache($postParam, $postJSON);
 
                         $postInfo = $postJSON['posts'][0];
@@ -99,7 +99,7 @@ class handler {
                             case 'video':
                                 $output = Content::$parserName($postInfo);
 
-                                // video source parsed
+                                # video source parsed
                                 if ($output) {
                                     Output::redirect($output);
                                     $recordForNextTime = array(
@@ -108,7 +108,7 @@ class handler {
                                     );
                                 }
 
-                                // no video parsed
+                                # no video parsed
                                 else {
                                     $errMsg = "Can't not parse video post, maybe it's too complicated to get the video source out.";
                                     throw new Exception($errMsg);
@@ -120,9 +120,9 @@ class handler {
                                 $photoUrls = Content::$parserName($postInfo);
                                 $photoCount = count($photoUrls);
 
-                                // photo found
+                                # photo found
                                 if ($photoCount > 0) {
-                                    // one photo
+                                    # one photo
                                     if ($photoCount === 1) {
                                         Output::redirect($photoUrls[0]);
 
@@ -132,14 +132,14 @@ class handler {
                                         );
                                     }
 
-                                    // multi photo
+                                    # multi photo
                                     else {
 
-                                        // to make a zip pack
+                                        # to make a zip pack
                                         if ($makePack) {
                                             $imagesFromCache = Input::fetchImagesFromCache($photoUrls);
 
-                                            // survey variables
+                                            # survey variables
                                             {
                                                 $total = count($photoUrls);
                                                 $cached = count($imagesFromCache);
@@ -147,40 +147,40 @@ class handler {
                                                 $startTime = microtime(true);
                                             }
 
-                                            // get images
+                                            # get images
                                             $imagesContainer = array_fill_keys($photoUrls, null);
                                             $randomOrder = array_values($photoUrls); shuffle($randomOrder);
                                             foreach ($randomOrder as $imgUrl) {
                                                 $fileName = basename($imgUrl);
 
-                                                // image in cache found
+                                                # image in cache found
                                                 if (isset($imagesFromCache[$fileName])) {
                                                     $imagesContainer[$imgUrl] = &$imagesFromCache[$fileName];
                                                 }
 
-                                                // not in cache
+                                                # not in cache
                                                 else {
-                                                    $imagesContainer[$imgUrl] = Input::fetchImageFromNetwork($imgUrl); // fetch from network
-                                                    $imagesContainer[$imgUrl] && static::$mc->singleSet($fileName, $imagesContainer[$imgUrl]); // write to cache
+                                                    $imagesContainer[$imgUrl] = Input::fetchImageFromNetwork($imgUrl); # fetch from network
+                                                    $imagesContainer[$imgUrl] && static::$mc->singleSet($fileName, $imagesContainer[$imgUrl]); # write to cache
 
                                                     $fetched++;
                                                 }
                                             }
 
-                                            // output
+                                            # output
                                             $zipPack = Content::getImagesZipPack($imagesContainer);
                                             Output::echoZipFile($zipPack);
 
-                                            // survey record
+                                            # survey record
                                             $timeUsed = number_format(microtime(true) - $startTime, 3, '.', '');
                                             syslog(LOG_INFO, "Total: $total, From cache: $cached, From network: $fetched, Time used: {$timeUsed}s");
 
-                                            // refresh cache
+                                            # refresh cache
                                             static::$mc->touchKeys(array_keys($imagesFromCache));
-                                            //Output::writeImagesToCache($images, array_keys($imagesFromCache));
+                                            # Output::writeImagesToCache($images, array_keys($imagesFromCache));
                                         }
 
-                                        // to make a download page
+                                        # to make a download page
                                         else {
                                             $page = Content::getImagesDownloadPage($photoUrls);
                                             $readme = "Sever overloading all the time so no more images packing, open the htm file with google chrome and DIY thank you.\r\n服务器扛不住，取消图片打包，请使用谷歌浏览器打开htm文件自行下载，靴靴。";
@@ -195,7 +195,7 @@ class handler {
                                     }
                                 }
 
-                                // no photo found
+                                # no photo found
                                 else {
                                     $errMsg = "No images found in the tumblr post.";
                                     throw new Exception($errMsg);
@@ -206,9 +206,9 @@ class handler {
 
                     }
 
-                    // no post json back from tumblr
+                    # no post json back from tumblr
                     else {
-                        $postParam = false; //don't write quick response
+                        $postParam = false; # don't write quick response
                         $errMsg = 'No post info back from Tumblr.';
                         throw new Exception($errMsg);
                     }
@@ -216,14 +216,14 @@ class handler {
 
             }
 
-            // not a valid tumblr url
+            # not a valid tumblr url
             else {
                 $errMsg = "Not a valid tumblr URL.";
                 throw new Exception($errMsg);
             }
 
         }
-        // catch error, generate and output error record
+        # catch error, generate and output error record
         catch (Exception $e) {
 
             $errText = Content::getErrorText($e->getMessage());
@@ -236,7 +236,7 @@ class handler {
             Output::echoTxtFile($errText);
 
         }
-        // write error record or quick response
+        # write error record or quick response
         finally {
             if ($postParam && $recordForNextTime)
                 Output::writeQuickResponseInfoToCache($postParam, $recordForNextTime);

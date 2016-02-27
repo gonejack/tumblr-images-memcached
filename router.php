@@ -8,7 +8,7 @@
 class Router {
 
     /**
-     * urlencode url components
+     * urlencode the url components
      * @param $url
      * @return string
      */

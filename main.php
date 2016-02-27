@@ -26,18 +26,18 @@ function main($isHashHost, $hostNumber, $makePackForMultiImages) {
 
     $url = isset($_GET['url']) ? $_GET['url'] : '';
 
-    // URL given
+    # URL given
     if ($url) {
 
-        // it's an image url
+        # it's an image url
         if (Input::isImageUrl($url))
             Output::redirect($url);
 
-        // this host is a hash host(redirecting instead of dealing request)
+        # this host is a hash host(redirecting instead of dealing request)
         elseif ($isHashHost)
             Router::route($url, $hostNumber);
 
-        // handling
+        # handling
         else {
             $mc = new mc();
             Input::loadMemcached($mc);
@@ -49,7 +49,7 @@ function main($isHashHost, $hostNumber, $makePackForMultiImages) {
 
     }
 
-    // not URL given
+    # not URL given
     else exit_script('Hello Tumblr!');
 }
 

@@ -89,12 +89,12 @@ class Input {
 
             $imagesStr = @file_get_contents($url);
 
-            // fetched
+            # fetched
             if ($imagesStr !== false) {
                 $status = static::parseHeaders($http_response_header, 'status');
                 $available = in_array($status, $validStatus);
 
-                // available
+                # available
                 if ($available) {
                     $imagesPack['images'][]    = $imagesStr;
                     $imagesPack['fileNames'][] = basename($url);
@@ -146,7 +146,7 @@ class Input {
      * @return array|bool|null|string header content. exception: no valid $headers given, return false. no header specified, return $headers. specified header not found, return null.
      */
     public static function parseHeaders($headers, $header = null) {
-        // headers given
+        # headers given
         if ($headers) {
             $output = array();
 
@@ -159,17 +159,17 @@ class Input {
                 $output[strtolower($h[0])] = $h[1];
             }
 
-            // specific header given
+            # specific header given
             if ($header = strtolower($header)) {
                 return isset($output[$header]) ? $output[$header] : null;
             }
 
-            // return all headers back
+            # return all headers back
             else return $output;
 
         }
 
-        // no headers given
+        # no headers given
         else return false;
     }
 

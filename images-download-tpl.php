@@ -21,7 +21,6 @@
         figure img {
             width: 100%;
             height: auto;
-            /*border-bottom: 1px solid #ccc;*/
             padding-bottom: 15px;
             margin-bottom: 5px;
         }
