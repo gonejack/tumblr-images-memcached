@@ -122,7 +122,7 @@ EOD;
         return $errText;
     }
 
-    public static function getImagesDownloadPage($imageUrls){
+    public static function getImagesDownPage($imageUrls){
         ob_start();
         include_once('images-download-tpl.php');
         return ob_get_clean();

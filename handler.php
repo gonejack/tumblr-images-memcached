@@ -35,46 +35,46 @@ class handler {
     public static function handle($url, $makePack = false) {
 
         $postParam = static::parseUrlParam($url);
-        $recordForNextTime = null;
+        $quickInfo = null;
 
         # try to process it
         try {
 
             # a valid tumblr url given
             if ($postParam) {
-                $quickInfo = Input::fetchQuickResponseInfoFromCache($postParam);
+                $cachedQuickInfo = Input::fetchQuickInfoCache($postParam);
 
                 # quick response info found
-                if ($quickInfo) {
+                if ($cachedQuickInfo) {
                     syslog(LOG_INFO, "Quick Response.");
 
                     # make quick response
-                    switch ($quickInfo['type']) {
+                    switch ($cachedQuickInfo['type']) {
                         case 'html':
-                            Output::echoHtmlFile($quickInfo['content']);
+                            Output::echoHtmlFile($cachedQuickInfo['content']);
                             break;
                         case 'video':
                         case 'singlePhoto':
-                            Output::redirect($quickInfo['content']);
+                            Output::redirect($cachedQuickInfo['content']);
                             break;
                         case 'htmlZip':
-                            Output::echoZipFile($quickInfo['content']);
+                            Output::echoZipFile($cachedQuickInfo['content']);
                             break;
                         case 'error':
-                            Output::echoTxtFile($quickInfo['content']);
+                            Output::echoTxtFile($cachedQuickInfo['content']);
                             break;
                     }
                 }
 
                 # no quick response found, we got to process it
                 else {
-                    $postJSON = Input::fetchPostInfoFromCache($postParam) ?: Input::queryTumblrApi($postParam);
+                    $postJSON = Input::fetchPostInfoCache($postParam) ?: Input::queryTumblrApi($postParam);
 
                     # post json gotten
                     if ($postJSON) {
 
                         # save post info to memcached
-                        Output::writePostInfoToCache($postParam, $postJSON);
+                        Output::setPostInfoCache($postParam, $postJSON);
 
                         $postInfo = $postJSON['posts'][0];
                         $postType = Content::parsePostType($postInfo);
@@ -91,7 +91,7 @@ class handler {
                                 $zipStr = Content::getHtmlZipPack($output);
                                 Output::echoZipFile($zipStr);
 
-                                $recordForNextTime = array(
+                                $quickInfo = array(
                                     'type' => 'htmlZip',
                                     'content' => $zipStr
                                 );
@@ -102,7 +102,7 @@ class handler {
                                 # video source parsed
                                 if ($output) {
                                     Output::redirect($output);
-                                    $recordForNextTime = array(
+                                    $quickInfo = array(
                                         'type' => 'video',
                                         'content' => $output
                                     );
@@ -126,7 +126,7 @@ class handler {
                                     if ($photoCount === 1) {
                                         Output::redirect($photoUrls[0]);
 
-                                        $recordForNextTime = array(
+                                        $quickInfo = array(
                                             'type' => 'singlePhoto',
                                             'content' => $photoUrls[0]
                                         );
@@ -137,38 +137,38 @@ class handler {
 
                                         # to make a zip pack
                                         if ($makePack) {
-                                            $imagesFromCache = Input::fetchImagesFromCache($photoUrls);
+                                            $imagesCache = Input::fetchImagesCache($photoUrls);
 
                                             # survey variables
                                             {
                                                 $total = count($photoUrls);
-                                                $cached = count($imagesFromCache);
+                                                $cached = count($imagesCache);
                                                 $fetched = 0;
                                                 $startTime = microtime(true);
                                             }
 
                                             # get images
-                                            $imagesContainer = array_fill_keys($photoUrls, null);
+                                            $imagesCont = array_fill_keys($photoUrls, null);
                                             $randomOrder = array_values($photoUrls); shuffle($randomOrder);
                                             foreach ($randomOrder as $imgUrl) {
                                                 $fileName = basename($imgUrl);
 
                                                 # image in cache found
-                                                if (isset($imagesFromCache[$fileName])) {
-                                                    $imagesContainer[$imgUrl] = &$imagesFromCache[$fileName];
+                                                if (isset($imagesCache[$fileName])) {
+                                                    $imagesCont[$imgUrl] = &$imagesCache[$fileName];
                                                 }
 
                                                 # not in cache
                                                 else {
-                                                    $imagesContainer[$imgUrl] = Input::fetchImageFromNetwork($imgUrl); # fetch from network
-                                                    $imagesContainer[$imgUrl] && static::$mc->singleSet($fileName, $imagesContainer[$imgUrl]); # write to cache
+                                                    $imagesCont[$imgUrl] = Input::fetchImage($imgUrl); # fetch from network
+                                                    $imagesCont[$imgUrl] && static::$mc->singleSet($fileName, $imagesCont[$imgUrl]); # write to cache
 
                                                     $fetched++;
                                                 }
                                             }
 
                                             # output
-                                            $zipPack = Content::getImagesZipPack($imagesContainer);
+                                            $zipPack = Content::getImagesZipPack($imagesCont);
                                             Output::echoZipFile($zipPack);
 
                                             # survey record
@@ -176,18 +176,18 @@ class handler {
                                             syslog(LOG_INFO, "Total: $total, From cache: $cached, From network: $fetched, Time used: {$timeUsed}s");
 
                                             # refresh cache
-                                            static::$mc->touchKeys(array_keys($imagesFromCache));
-                                            # Output::writeImagesToCache($images, array_keys($imagesFromCache));
+                                            static::$mc->touchKeys(array_keys($imagesCache));
+                                            # Output::writeImagesToCache($images, array_keys($imagesCache));
                                         }
 
                                         # to make a download page
                                         else {
-                                            $page = Content::getImagesDownloadPage($photoUrls);
+                                            $page = Content::getImagesDownPage($photoUrls);
                                             $readme = "Sever overloading all the time so no more images packing, open the htm file with google chrome and DIY thank you.\r\n服务器扛不住，取消图片打包，请使用谷歌浏览器打开htm文件自行下载，靴靴。";
                                             $zipStr = Content::getHtmlZipPack($page, null, $readme);
 
                                             Output::echoZipFile($zipStr);
-                                            $recordForNextTime = array(
+                                            $quickInfo = array(
                                                 'type' => 'htmlZip',
                                                 'content' => $zipStr
                                             );
@@ -228,7 +228,7 @@ class handler {
 
             $errText = Content::getErrorText($e->getMessage());
 
-            $recordForNextTime = array(
+            $quickInfo = array(
                 'type' => 'error',
                 'content' => $errText
             );
@@ -238,8 +238,7 @@ class handler {
         }
         # write error record or quick response
         finally {
-            if ($postParam && $recordForNextTime)
-                Output::writeQuickResponseInfoToCache($postParam, $recordForNextTime);
+            $postParam && $quickInfo && Output::setQuickInfoCache($postParam, $quickInfo);
         }
 
         return true;

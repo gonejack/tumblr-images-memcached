@@ -38,7 +38,7 @@ class Input {
      * @param array $postParam e.g. array('post_domain' => 'xx.tumblr.com', 'post_id' => xxxx)
      * @return mixed
      */
-    public static function fetchPostInfoFromCache($postParam) {
+    public static function fetchPostInfoCache($postParam) {
         !static::$mc && (static::$mc = new mc());
 
         $key = "{$postParam['post_domain']}|{$postParam['post_id']}";
@@ -51,7 +51,7 @@ class Input {
      * @param array $postParam e.g. array('post_domain' => 'xx.tumblr.com', 'post_id' => xxxx)
      * @return mixed
      */
-    public static function fetchQuickResponseInfoFromCache($postParam) {
+    public static function fetchQuickInfoCache($postParam) {
         !static::$mc && (static::$mc = new mc());
 
         $key = "{$postParam['post_domain']}|{$postParam['post_id']}|QuickResponse";
@@ -64,7 +64,7 @@ class Input {
      * @param $urlArray
      * @return mixed
      */
-    public static function fetchImagesFromCache($urlArray) {
+    public static function fetchImagesCache($urlArray) {
         !static::$mc && (static::$mc = new mc());
 
         $fileNameArray = array_map(function ($url) {
@@ -79,7 +79,7 @@ class Input {
      * @param array $urls array of image urls
      * @return array $imagesPack  array('images' => array(image content strings), fileNames => array(image file names), 'count' => Number(successful fetch))
      */
-    public static function fetchImagesFromNetwork($urls) {
+    public static function fetchImages($urls) {
 
         $imagesPack = array('images' => array(), 'fileNames' => array(), 'count' => 0);
 
@@ -111,7 +111,7 @@ class Input {
      * @param string $url the image url
      * @return bool|string false on failed, image string on succeed
      */
-    public static function fetchImageFromNetwork($url) {
+    public static function fetchImage($url) {
 
         $image = @file_get_contents($url);
 

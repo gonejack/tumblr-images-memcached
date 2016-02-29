@@ -85,7 +85,7 @@ class Output {
      * @param $images
      * @param array $cachedImagesKeys
      */
-    public static function writeImagesToCache($images, $cachedImagesKeys = array()) {
+    public static function setImagesCache($images, $cachedImagesKeys = array()) {
         !static::$mc && (static::$mc = new mc());
 
         $fileNameAsKey = array();
@@ -107,7 +107,7 @@ class Output {
      * @param array $postInfo dictionary data
      * @return bool
      */
-    public static function writePostInfoToCache($postParam, $postInfo) {
+    public static function setPostInfoCache($postParam, $postInfo) {
         !static::$mc && (static::$mc = new mc());
 
         $key = "{$postParam['post_domain']}|{$postParam['post_id']}";
@@ -121,7 +121,7 @@ class Output {
      * @param mixed $postInfo processed result data
      * @return bool
      */
-    public static function writeQuickResponseInfoToCache($postParam, $postInfo) {
+    public static function setQuickInfoCache($postParam, $postInfo) {
         !static::$mc && (static::$mc = new mc());
 
         $key = "{$postParam['post_domain']}|{$postParam['post_id']}|QuickResponse";
