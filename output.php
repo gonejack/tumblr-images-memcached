@@ -37,7 +37,9 @@ class Output {
         header('Content-Type: text/html');
         header('Content-Disposition: attachment; filename=' . date('Y-M-j-D-G-i-s') . '.htm');
 
-        echo $content;
+        if ($_SERVER['REQUEST_METHOD'] !== 'HEAD') {
+            echo $content;
+        }
 
         return true;
     }
@@ -52,7 +54,9 @@ class Output {
         header('Content-Length: ' . strlen($zip_str));
         header('Content-Disposition: attachment; filename=' . date('Y-M-j-D-G-i-s') . '.zip');
 
-        echo $zip_str;
+        if ($_SERVER['REQUEST_METHOD'] !== 'HEAD') {
+            echo $zip_str;
+        }
 
         return true;
     }
@@ -64,9 +68,12 @@ class Output {
      */
     public static function echoTxtFile($content) {
         header('Content-Type: text/plain');
+        header('Content-Length: ' . strlen($content));
         header('Content-Disposition: attachment; filename=' . date('Y-M-j-D-G-i-s') . '.txt');
 
-        echo $content;
+        if ($_SERVER['REQUEST_METHOD'] !== 'HEAD') {
+            echo $content;
+        }
 
         return true;
     }
@@ -74,11 +81,17 @@ class Output {
     /**
      * echo image as file download
      * @param string $image
+     * @return bool
      */
     public static function echoImageFile($image) {
         header('Content-Type: image/jpeg');
+        header('Content-Length: ' . strlen($image));
 
-        echo $image;
+        if ($_SERVER['REQUEST_METHOD'] !== 'HEAD') {
+            echo $image;
+        }
+
+        return true;
     }
 
     /**
