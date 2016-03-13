@@ -32,7 +32,7 @@ class handler {
         else return false;
     }
 
-    public static function handle($url, $makePack = false) {
+    public static function handle($url, $packImages = false) {
 
         $postParam = static::parseUrlParam($url);
         $quickInfo = null;
@@ -135,8 +135,8 @@ class handler {
                                     # multi photo
                                     else {
 
-                                        # to make a zip pack
-                                        if ($makePack) {
+                                        # to make a images pack
+                                        if ($packImages) {
                                             $imagesCache = Input::fetchImagesCache($photoUrls);
 
                                             # survey variables

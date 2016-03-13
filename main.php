@@ -8,21 +8,21 @@
 
 $isHashHost = false;
 $hostNumber = 4;
-$makePackForMultiImages = false;
+$packImages = false;
 
 spl_autoload_register(function ($class) {
     $class = strtolower($class);
     include_once("$class.php");
 });
 
-main($isHashHost, $hostNumber, $makePackForMultiImages);
+main($isHashHost, $hostNumber, $packImages);
 
 /**
  * @param $isHashHost Boolean Is this host a router
  * @param $hostNumber Number How many host there
- * @param $makePackForMultiImages Boolean make a zip pack for images?
+ * @param $packImages Boolean make a zip pack for images?
  */
-function main($isHashHost, $hostNumber, $makePackForMultiImages) {
+function main($isHashHost, $hostNumber, $packImages) {
 
     $url = isset($_GET['url']) ? $_GET['url'] : '';
 
@@ -44,7 +44,7 @@ function main($isHashHost, $hostNumber, $makePackForMultiImages) {
             Output::loadMemcached($mc);
             Handler::loadMemcached($mc);
 
-            Handler::handle($url, $makePackForMultiImages);
+            Handler::handle($url, $packImages);
         }
 
     }
