@@ -42,14 +42,14 @@ class handler {
 
             # a valid tumblr url given
             if ($postParam) {
-                $cachedQuickInfo = Input::fetchQuickInfoCache($postParam);
+                $cachedInfo = Input::fetchQuickInfoCache($postParam);
 
                 # quick response info found
-                if ($cachedQuickInfo) {
+                if ($cachedInfo) {
                     # make just header response
                     if ($_SERVER['REQUEST_METHOD'] === 'HEAD') {
                         syslog(LOG_INFO, "HEAD Response.");
-                        foreach ($cachedQuickInfo['headers'] as $header) {
+                        foreach ($cachedInfo['headers'] as $header) {
                             header($header);
                         }
                     }
@@ -57,8 +57,8 @@ class handler {
                     # make quick response
                     else {
                         syslog(LOG_INFO, "Quick Response.");
-                        $content =  $cachedQuickInfo['content'];
-                        switch ($cachedQuickInfo['type']) {
+                        $content =  $cachedInfo['content'];
+                        switch ($cachedInfo['type']) {
                             case 'html':
                                 Output::echoHtmlFile($content);
                                 break;
@@ -188,6 +188,8 @@ class handler {
                                             # refresh cache
                                             static::$mc->touchKeys(array_keys($imagesCache));
                                             # Output::writeImagesToCache($images, array_keys($imagesCache));
+
+                                            $quickInfo = array('HEADOnly' => true);
                                         }
 
                                         # to make a download page
