@@ -57,10 +57,8 @@ class Input {
         $key = "{$postParam['post_domain']}|{$postParam['post_id']}|QuickResponse";
         $info = static::$mc->getInfo($key);
 
-        if ($info && isset($info['HEADOnly'])) {
+        if ($info && isset($info['HEADOnly']))
             return $_SERVER['REQUEST_METHOD'] === 'HEAD' ? $info : false;
-        }
-
         else
             return $info;
     }
