@@ -85,9 +85,9 @@ class Input {
      */
     public static function fetchImages($urls) {
 
-        $imagesPack = array('images' => array(), 'fileNames' => array(), 'count' => 0);
+        $imagesPack = ['images' => [], 'fileNames' => [], 'count' => 0];
 
-        $validStatus = array(200, 301, 304);
+        $validStatus = [200, 301, 304];
 
         foreach ($urls as $url) {
 
@@ -120,7 +120,7 @@ class Input {
         $image = @file_get_contents($url);
 
         $status = static::parseHeaders($http_response_header, 'status');
-        $validStatus = array(200, 301, 304);
+        $validStatus = [200, 301, 304];
         $available = in_array($status, $validStatus);
 
         return $available ? $image : false;
@@ -152,7 +152,7 @@ class Input {
     public static function parseHeaders($headers, $header = null) {
         # headers given
         if ($headers) {
-            $output = array();
+            $output = [];
 
             if (strpos($headers[0], 'HTTP') !== false) {
                 list(, $output['status'], $output['status_text']) = explode(' ', $headers[0]);

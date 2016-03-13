@@ -23,10 +23,10 @@ class handler {
      */
     private static function parseUrlParam($url) {
         if (preg_match('<https?://(.+)/post/(\d+)>', $url, $match)) {
-            return array(
+            return [
                 'post_domain' => $match[1],
                 'post_id'     => $match[2]
-            );
+            ];
         }
 
         else return false;
@@ -101,10 +101,10 @@ class handler {
                                 $zipStr = Content::getHtmlZipPack($output);
                                 Output::echoZipFile($zipStr);
 
-                                $quickInfo = array(
+                                $quickInfo = [
                                     'type' => 'htmlZip',
                                     'content' => $zipStr
-                                );
+                                ];
                                 break;
                             case 'video':
                                 $output = Content::$parserName($postInfo);
@@ -112,10 +112,10 @@ class handler {
                                 # video source parsed
                                 if ($output) {
                                     Output::redirect($output);
-                                    $quickInfo = array(
+                                    $quickInfo = [
                                         'type' => 'video',
                                         'content' => $output
-                                    );
+                                    ];
                                 }
 
                                 # no video parsed
@@ -136,10 +136,10 @@ class handler {
                                     if ($photoCount === 1) {
                                         Output::redirect($photoUrls[0]);
 
-                                        $quickInfo = array(
+                                        $quickInfo = [
                                             'type' => 'singlePhoto',
                                             'content' => $photoUrls[0]
-                                        );
+                                        ];
                                     }
 
                                     # multi photo
@@ -189,7 +189,10 @@ class handler {
                                             static::$mc->touchKeys(array_keys($imagesCache));
                                             # Output::writeImagesToCache($images, array_keys($imagesCache));
 
-                                            $quickInfo = array('HEADOnly' => true);
+                                            $quickInfo = [
+                                                'HEADOnly' => true,
+                                                'headers' => []
+                                            ];
                                         }
 
                                         # to make a download page
@@ -199,10 +202,10 @@ class handler {
                                             $zipStr = Content::getHtmlZipPack($page, null, $readme);
 
                                             Output::echoZipFile($zipStr);
-                                            $quickInfo = array(
+                                            $quickInfo = [
                                                 'type' => 'htmlZip',
                                                 'content' => $zipStr
-                                            );
+                                            ];
                                         }
                                     }
                                 }
@@ -240,10 +243,10 @@ class handler {
 
             $errText = Content::getErrorText($e->getMessage());
 
-            $quickInfo = array(
+            $quickInfo = [
                 'type' => 'error',
                 'content' => $errText
-            );
+            ];
 
             Output::echoTxtFile($errText);
 

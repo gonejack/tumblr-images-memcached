@@ -98,10 +98,10 @@ class Output {
      * @param $images
      * @param array $cachedImagesKeys
      */
-    public static function setImagesCache($images, $cachedImagesKeys = array()) {
+    public static function setImagesCache($images, $cachedImagesKeys = []) {
         !static::$mc && (static::$mc = new mc());
 
-        $fileNameAsKey = array();
+        $fileNameAsKey = [];
         foreach ($images as $url => &$image) {
             $fileName = basename($url);
 

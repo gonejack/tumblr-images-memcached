@@ -9,7 +9,7 @@
 class Content {
 
     private static function decodeHtmlChars($str) {
-        $convertMap = array(0x0, 0x2FFFF, 0, 0xFFFF);
+        $convertMap = [0x0, 0x2FFFF, 0, 0xFFFF];
 
         return mb_decode_numericentity($str, $convertMap, 'UTF-8');
     }
@@ -25,7 +25,7 @@ class Content {
     public static function parseAnswer($postInfo) {
         $question = static::decodeHtmlChars($postInfo['question']);
         $answer   = static::decodeHtmlChars($postInfo['answer']);
-        $tags     = implode(', ', isset($postInfo['tags']) ? $postInfo['tags'] : array());
+        $tags     = implode(', ', isset($postInfo['tags']) ? $postInfo['tags'] : []);
         $output   = "[Q&A]\r\n\r\n$question\r\n\r\n$answer\r\n\r\nTags: $tags\r\n";
 
         return htmlspecialchars($output);
@@ -38,7 +38,7 @@ class Content {
         }
         $date = "date: {$postInfo['date']}";
         $url  = "url: {$postInfo['url']}";
-        $tags = 'tags: ' . implode(', ', isset($postInfo['tags']) ? $postInfo['tags'] : array());
+        $tags = 'tags: ' . implode(', ', isset($postInfo['tags']) ? $postInfo['tags'] : []);
 
         $output = "$conversation_text\r\n$date\r\n$tags\r\n$url";
 
@@ -102,7 +102,7 @@ EOD;
     }
 
     public static function parsePhoto($post_info) {
-        $urls = array();
+        $urls = [];
 
         if ($post_info['photos']) {
             foreach ($post_info['photos'] as $item) {
