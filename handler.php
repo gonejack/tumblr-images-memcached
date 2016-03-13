@@ -46,23 +46,33 @@ class handler {
 
                 # quick response info found
                 if ($cachedQuickInfo) {
-                    syslog(LOG_INFO, "Quick Response.");
+                    # make just header response
+                    if ($_SERVER['REQUEST_METHOD'] === 'HEAD') {
+                        syslog(LOG_INFO, "HEAD Response.");
+                        foreach ($cachedQuickInfo['headers'] as $header) {
+                            header($header);
+                        }
+                    }
 
                     # make quick response
-                    switch ($cachedQuickInfo['type']) {
-                        case 'html':
-                            Output::echoHtmlFile($cachedQuickInfo['content']);
-                            break;
-                        case 'video':
-                        case 'singlePhoto':
-                            Output::redirect($cachedQuickInfo['content']);
-                            break;
-                        case 'htmlZip':
-                            Output::echoZipFile($cachedQuickInfo['content']);
-                            break;
-                        case 'error':
-                            Output::echoTxtFile($cachedQuickInfo['content']);
-                            break;
+                    else {
+                        syslog(LOG_INFO, "Quick Response.");
+                        $content =  $cachedQuickInfo['content'];
+                        switch ($cachedQuickInfo['type']) {
+                            case 'html':
+                                Output::echoHtmlFile($content);
+                                break;
+                            case 'video':
+                            case 'singlePhoto':
+                                Output::redirect($content);
+                                break;
+                            case 'htmlZip':
+                                Output::echoZipFile($content);
+                                break;
+                            case 'error':
+                                Output::echoTxtFile($content);
+                                break;
+                        }
                     }
                 }
 
@@ -139,7 +149,7 @@ class handler {
                                         if ($packImages) {
                                             $imagesCache = Input::fetchImagesCache($photoUrls);
 
-                                            # survey variables
+                                            # statement variables
                                             {
                                                 $total = count($photoUrls);
                                                 $cached = count($imagesCache);
@@ -171,7 +181,7 @@ class handler {
                                             $zipPack = Content::getImagesZipPack($imagesCont);
                                             Output::echoZipFile($zipPack);
 
-                                            # survey record
+                                            # statement record
                                             $timeUsed = number_format(microtime(true) - $startTime, 3, '.', '');
                                             syslog(LOG_INFO, "Total: $total, From cache: $cached, From network: $fetched, Time used: {$timeUsed}s");
 
@@ -238,7 +248,10 @@ class handler {
         }
         # write error record or quick response
         finally {
-            $postParam && $quickInfo && Output::setQuickInfoCache($postParam, $quickInfo);
+            if ($postParam && $quickInfo) {
+                $quickInfo['headers'] = headers_list();
+                Output::setQuickInfoCache($postParam, $quickInfo);
+            }
         }
 
         return true;
