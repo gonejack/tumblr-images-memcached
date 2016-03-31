@@ -54,9 +54,9 @@ class handler {
                         }
                     }
 
-                    # make quick response
+                    # make content response
                     else {
-                        syslog(LOG_INFO, "Quick Response.");
+                        syslog(LOG_INFO, "Content Response.");
                         $content =  $cachedInfo['content'];
                         switch ($cachedInfo['type']) {
                             case 'html':

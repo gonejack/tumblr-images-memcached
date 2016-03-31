@@ -108,7 +108,9 @@ EOD;
             foreach ($post_info['photos'] as $item) {
                 $urls[] = $item['photo-url-1280'];
             }
-        } else {
+        }
+
+        else {
             $urls[] = $post_info['photo-url-1280'];
         }
 
