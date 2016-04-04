@@ -5,7 +5,7 @@
 1. 注册Google App Engine。
 2. 创建一个应用，完成后打开https://console.cloud.google.com
 3. 右上角切换到你创建的应用，点击旁边的Active Google Cloud Shell。
-4. 在弹出来的命令行界面敲下面3条命令：
+4. 在弹出来的命令行界面敲下面命令（第三条命令可选）：
 
   ```
   git clone https://github.com/gonejack/tumblr-images-memcached.git
