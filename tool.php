@@ -45,14 +45,14 @@ class TOOL {
         else return false;
     }
 
-    public static function path($type, $date, $file) {
+    public static function path($type, $date, $file = null) {
         $type = $type ?: 'img';
-
-//        $weekAgo = date('y-m-d', strtotime('-1 week'));
 
         switch ($type) {
             case 'img':
                 return Tool::FS_ROOT ."images/$date/$file";
+            case 'imgDir':
+                return Tool::FS_ROOT ."images/$date";
 
             default:
                 return '';
@@ -124,6 +124,33 @@ class TOOL {
 
     public static function resINFOKey($param) {
         return "{$param['domain']}|{$param['id']}|QuickResponse";
+    }
+
+    public static function cleanLastWeek() {
+        $weekAgo = date('y-m-d', strtotime('-1 week'));
+
+        $dir = static::path('imgDir', $weekAgo);
+
+        if (is_dir($dir)) static::_rmdir($dir);
+
+        return true;
+    }
+
+    private static function _rmdir($src) {
+        $dir = opendir($src);
+        while (false !== ($file = readdir($dir))) {
+            if (($file != '.') && ($file != '..')) {
+                $full = $src . '/' . $file;
+                if (is_dir($full)) {
+                    static::_rmdir($full);
+                }
+                else {
+                    unlink($full);
+                }
+            }
+        }
+        closedir($dir);
+        rmdir($src);
     }
 
 }

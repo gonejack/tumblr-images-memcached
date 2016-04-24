@@ -87,6 +87,9 @@ class HANDLER {
                         else {
 
                             if (CONF_PACKIMGS) {
+
+                                TOOL::cleanLastWeek();
+
                                 $IMGsPack = IN::getIMGs($URLs);
                                 $ZIP = TOOL::IMGZip($IMGsPack);
 
