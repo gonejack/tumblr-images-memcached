@@ -88,13 +88,6 @@ class IN {
         }
     }
 
-//    private static function _readJSON($postParam) {
-//
-//        $key = self::_JSONKey($postParam);
-//
-//        return static::$mc->get($key);
-//    }
-
     private static function _netIMG($url) {
         self::$statement['net'] += 1;
 

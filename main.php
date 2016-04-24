@@ -40,9 +40,9 @@ function main() {
     }
 
     # no URL given
-    else end('Hello Tumblr!');
+    else stop('Hello Tumblr!');
 }
 
-function end($message = null) {
+function stop($message = null) {
     exit($message);
 }
