@@ -6,56 +6,43 @@
  * Time: 21:20
  */
 
-$isHashHost = false;
-$hostNumber = 4;
-$packImages = false;
+define('CONF_HASH', false);
+define('CONF_HASH_NUM', 4);
+define('CONF_PACKIMGS', true);
 
 spl_autoload_register(function ($class) {
     $class = strtolower($class);
     include_once("$class.php");
 });
 
-main($isHashHost, $hostNumber, $packImages);
+main();
 
-/**
- * @param $isHashHost Boolean Is this host a router
- * @param $hostNumber Number How many host there
- * @param $packImages Boolean make a zip pack for images?
- */
-function main($isHashHost, $hostNumber, $packImages) {
+function main() {
 
     $url = isset($_GET['url']) ? $_GET['url'] : '';
 
-    # URL given
     if ($url) {
 
-        # it's an image url
-        if (Input::isImageUrl($url))
-            Output::redirect($url);
+        if (TOOL::isIMGURL($url))
+            OUT::redirect($url);
 
-        # this host is a hash host(redirecting instead of dealing request)
-        elseif ($isHashHost)
-            Router::route($url, $hostNumber);
+        elseif (CONF_HASH)
+            ROUTER::route($url, CONF_HASH_NUM);
 
-        # handling
         else {
             $mc = new mc();
-            Input::loadMemcached($mc);
-            Output::loadMemcached($mc);
-            Handler::loadMemcached($mc);
+            IN::loadMC($mc);
+            OUT::loadMC($mc);
+            HANDLER::loadMC($mc);
 
-            Handler::handle($url, $packImages);
+            HANDLER::handle($url);
         }
-
     }
 
-    # not URL given
-    else exit_script('Hello Tumblr!');
+    # no URL given
+    else end('Hello Tumblr!');
 }
 
-/**
- * @param null $message
- */
-function exit_script($message = null) {
+function end($message = null) {
     exit($message);
 }

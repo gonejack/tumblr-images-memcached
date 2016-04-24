@@ -51,16 +51,16 @@
 <body>
 <div id="content">
     <?php
-    /** @var array $imageUrls */
-    foreach ($imageUrls as $url) {
-        $fileName = basename($url);
+    /** @var array $URLs */
+    foreach ($URLs as $URL) {
+        $fileName = basename($URL);
         echo <<<EOD
     <figure>
-        <a href="$url" download="$fileName" title="Use Google Chrome browser if any trouble happened.">
-            <img src="$url">
+        <a href="$URL" download="$fileName" title="Use Google Chrome browser if any trouble happened.">
+            <img src="$URL">
         </a>
         <figcaption>
-            <a href="$url" download="$fileName" class="downA" title="Use Google Chrome browser if any trouble happened.">Download</a>
+            <a href="$URL" download="$fileName" class="downA" title="Use Google Chrome browser if any trouble happened.">Download</a>
         </figcaption>
     </figure>
 

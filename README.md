@@ -11,7 +11,7 @@
   git clone https://github.com/gonejack/tumblr-images-memcached.git
   cd tumblr-images-memcached
   nano main.php
-  （找到$packImages = false改为$packImages = true，按 CTRL+O 保存，CTRL+X 退出编辑）
+  （找到'CONF_PACKIMGS', false改为'CONF_PACKIMGS', true，按 CTRL+O 保存，CTRL+X 退出编辑）
   gcloud preview app deploy ./app.yaml --promote
   ```
 
@@ -31,7 +31,7 @@ Server being overload all the time, got to cancel the zip packing for multi-imag
   git clone https://github.com/gonejack/tumblr-images-memcached.git
   cd tumblr-images-memcached
   nano main.php
-  (find $packImages = false, edit it to $packImages = true. CTRL+O to save and CTRL+X to exit, then go ahead typing)
+  (find 'CONF_PACKIMGS', false, edit it to 'CONF_PACKIMGS', true. CTRL+O to save and CTRL+X to exit, then go ahead typing)
   gcloud preview app deploy ./app.yaml --promote
   ```
 
