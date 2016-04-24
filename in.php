@@ -102,12 +102,18 @@ class IN {
     }
 
     private static function _fsIMG($fileName) {
-        self::$statement['fs'] += 1;
-
         $today = date('y-m-d');
         $path = Tool::path('img', $today, $fileName);
 
-        return file_exists($path) ? file_get_contents($path) : false;
+        if (file_exists($path)) {
+            self::$statement['fs'] += 1;
+
+            return file_get_contents($path);
+        }
+
+        else {
+            return false;
+        }
     }
 
     private static function _resetStatement() {
