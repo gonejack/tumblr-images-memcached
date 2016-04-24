@@ -67,7 +67,7 @@ class IN {
     }
 
     public static function JSON($param) {
-        $API = "http://{$param['post_domain']}/api/read/json?id={$param['post_id']}";
+        $API = "http://{$param['domain']}/api/read/json?id={$param['id']}";
 
         $try = 0;
         do {
