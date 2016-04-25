@@ -23,7 +23,7 @@ class HANDLER {
 
         try {
             $param = TOOL::URLParam($url);
-            $resINFO = IN::resINFO($param);
+            $resINFO = IN::mcINFO($param);
 
             if ($resINFO) {
                 # it is a HEAD request
@@ -62,22 +62,29 @@ class HANDLER {
                         $ZIP  = TOOL::HTMLZip($HTML);
                         $INFO = ['CONTENT' => $ZIP, 'TYPE' => 'HTMLZip'];
 
-                    OUT::ZIP($ZIP, TOOL::isREQMethod('HEAD'));
+                        OUT::ZIP($ZIP, TOOL::isREQMethod('HEAD'));
                     break;
 
                     case 'video':
                         $SOURCE = PARSER::$method($JSON);
-                        $INFO = ['CONTENT' => $SOURCE, 'TYPE' => 'SOURCE'];
+                        $len = IN::resLen($SOURCE);
 
-                        OUT::redirect($SOURCE);
+                        if ($len && $len < 30 * 1024 * 1024) {
+                            $INFO = ['CONTENT' => $SOURCE, 'TYPE' => 'SOURCE'];
+
+                            OUT::redirect($SOURCE);
+                        }
+
+                        else {
+                            // @TODO video page
+                        }
                     break;
 
                     case 'unknow':
                     case 'photo':
                         $URLs = PARSER::$method($JSON);
 
-                        $num = count($URLs);
-                        if ($num === 1) {
+                        if (count($URLs) === 1) {
                             $SOURCE = $URLs[0];
                             $INFO = ['CONTENT' => $SOURCE, 'TYPE' => 'SOURCE'];
 
@@ -87,8 +94,6 @@ class HANDLER {
                         else {
 
                             if (CONF_PACKIMGS) {
-
-                                TOOL::cleanLastWeek();
 
                                 $IMGsPack = IN::getIMGs($URLs);
                                 $ZIP = TOOL::IMGZip($IMGsPack);

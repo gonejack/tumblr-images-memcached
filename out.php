@@ -53,17 +53,17 @@ class OUT {
     public static function saveIMGs(&$pack) {
         $today = date('y-m-d');
         $len = count($pack['images']);
-        $count = 0;
+        $saved = 0;
 
         for ($i = 0; $i < $len; $i++) {
             $name = $pack['fileNames'][$i];
             $img = $pack['images'][$i];
 
             $path = Tool::path('img', $today, $name);
-            $count += self::_write($path, $img);
+            $saved += self::_write($path, $img);
         }
 
-        return $count === $len;
+        return $saved === $len;
     }
 
     public static function headers($headers) {
@@ -75,7 +75,7 @@ class OUT {
     }
 
     public static function resINFO($param,$info) {
-        $key = TOOL::resINFOKey($param);
+        $key = TOOL::mcINFOKey($param);
 
         return static::$mc->set($key, $info);
     }

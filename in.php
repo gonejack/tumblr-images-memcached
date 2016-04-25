@@ -45,8 +45,8 @@ class IN {
         return $RET;
     }
 
-    public static function resINFO($param) {
-        $key = TOOL::resINFOKey($param);
+    public static function mcINFO($param) {
+        $key = TOOL::mcINFOKey($param);
         $info = static::$mc->get($key);
 
         if ($info) {
@@ -73,7 +73,7 @@ class IN {
         do {
 
             $JSONStr = @file_get_contents($API);
-            $status  = Tool::readHeader($http_response_header, 'status') ?: 0;
+            $status  = TOOL::readHeader($http_response_header, 'status') ?: 0;
 
             $failed = strlen($JSONStr) < 10;
 
@@ -88,13 +88,22 @@ class IN {
         }
     }
 
+    public static function resLen($src) {
+        $OPT = [ 'http' => [ 'method'=> 'HEAD'] ];
+        $CONF = stream_context_create($OPT);
+
+        @file_get_contents($src, NULL, $CONF);
+
+        return TOOL::readHeader($http_response_header, 'content-length') || false;
+    }
+
     private static function _netIMG($url) {
         self::$statement['net'] += 1;
 
         $CODES = [200, 301, 304];
 
         $img    = @file_get_contents($url);
-        $status = Tool::readHeader($http_response_header, 'status');
+        $status = TOOL::readHeader($http_response_header, 'status');
 
         $OK = $img && in_array($status, $CODES);
 
@@ -103,7 +112,7 @@ class IN {
 
     private static function _fsIMG($fileName) {
         $today = date('y-m-d');
-        $path = Tool::path('img', $today, $fileName);
+        $path = TOOL::path('img', $today, $fileName);
 
         if (file_exists($path)) {
             self::$statement['fs'] += 1;

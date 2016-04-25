@@ -99,13 +99,21 @@ class TOOL {
         }
 
         return $zf->file();
-
-
     }
 
     public static function IMGsPage($URLs){
         ob_start();
-        include('images-download-tpl.php');
+
+        include('images-downtpl.php');
+
+        return ob_get_clean();
+    }
+
+    public static function VPage($URL){
+        ob_start();
+
+        include('video-downtpl.php');
+
         return ob_get_clean();
     }
 
@@ -122,7 +130,7 @@ class TOOL {
         return $_SERVER['REQUEST_METHOD'] === $method;
     }
 
-    public static function resINFOKey($param) {
+    public static function mcINFOKey($param) {
         return "{$param['domain']}|{$param['id']}|QuickResponse";
     }
 

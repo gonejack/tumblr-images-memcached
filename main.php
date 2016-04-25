@@ -39,6 +39,10 @@ function main() {
         }
     }
 
+    elseif (isset($_GET['clean'])) {
+        TOOL::cleanLastWeek();
+    }
+
     # no URL given
     else stop('Hello Tumblr!');
 }

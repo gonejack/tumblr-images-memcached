@@ -1,0 +1,4 @@
+cron:
+- description: daily clean job
+  url: /?clean=lastweek
+  schedule: every 24 hours
