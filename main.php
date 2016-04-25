@@ -43,7 +43,7 @@ function main() {
     elseif (isset($_GET['clean'])) {
         TOOL::cleanLastWeek();
 
-        echo 'Done!';
+        stop('Done!');
     }
 
     # no URL given

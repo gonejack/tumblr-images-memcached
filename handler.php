@@ -129,7 +129,7 @@ class HANDLER {
         }
 
         finally {
-            if ($INFO) {
+            if ($INFO && $param) {
 
                 $INFO['HEAD'] = headers_list();
 
