@@ -18,8 +18,7 @@ class HANDLER {
 
     public static function handle($url) {
 
-        $INFO = null;
-        $param = null;
+        $param = $INFO = null;
 
         try {
             $param = TOOL::URLParam($url);
@@ -129,7 +128,7 @@ class HANDLER {
         }
 
         finally {
-            if ($INFO && $param) {
+            if ($INFO) {
 
                 $INFO['HEAD'] = headers_list();
 
