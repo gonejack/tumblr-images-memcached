@@ -94,7 +94,7 @@ class IN {
 
         @file_get_contents($src, NULL, $CONF);
 
-        return TOOL::readHeader($http_response_header, 'content-length') || false;
+        return TOOL::readHeader($http_response_header, 'content-length') ?: false;
     }
 
     private static function _netIMG($url) {
