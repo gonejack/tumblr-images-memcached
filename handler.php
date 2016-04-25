@@ -23,25 +23,25 @@ class HANDLER {
 
         try {
             $param = TOOL::URLParam($url);
-            $resINFO = IN::mcINFO($param);
+            $mcINFO = IN::mcINFO($param);
 
-            if ($resINFO) {
+            if ($mcINFO) {
                 # it is a HEAD request
                 if (TOOL::isREQMethod('HEAD')) {
                     TOOL::log('HEAD Response');
 
-                    OUT::headers($resINFO['HEAD']);
+                    OUT::headers($mcINFO['HEAD']);
                 }
 
                 else {
                     TOOL::log('GET Response');
 
-                    switch ($resINFO['TYPE']) {
+                    switch ($mcINFO['TYPE']) {
                         case 'HTMLZip':
-                            OUT::ZIP($resINFO['CONTENT']);
+                            OUT::ZIP($mcINFO['CONTENT']);
                         break;
                         case 'SOURCE':
-                            OUT::redirect($resINFO['CONTENT']);
+                            OUT::redirect($mcINFO['CONTENT']);
                         break;
                     }
                 }
@@ -76,7 +76,11 @@ class HANDLER {
                         }
 
                         else {
-                            // @TODO video page
+                            $HTML = TOOL::VPage($SOURCE);
+                            $ZIP  = TOOL::HTMLZip($HTML);
+                            $INFO = ['CONTENT' => $ZIP, 'TYPE' => 'HTMLZip'];
+
+                            OUT::ZIP($ZIP, TOOL::isREQMethod('HEAD'));
                         }
                     break;
 
@@ -109,7 +113,7 @@ class HANDLER {
                                 $ZIP = TOOL::HTMLZip($HTML);
                                 $INFO = ['CONTENT' => $ZIP, 'TYPE' => 'HTMLZip'];
 
-                                OUT::ZIP($ZIP);
+                                OUT::ZIP($ZIP, TOOL::isREQMethod('HEAD'));
                             }
                         }
                     break;

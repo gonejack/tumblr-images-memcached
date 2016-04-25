@@ -41,7 +41,7 @@
             border: none;
             font-size:1.5em;
             font-weight:bold;
-            cursor: hand;
+            cursor: pointer;
         }
         button:hover{
             color: black;
