@@ -37,10 +37,13 @@ function main() {
 
             HANDLER::handle($url);
         }
+
     }
 
     elseif (isset($_GET['clean'])) {
         TOOL::cleanLastWeek();
+
+        echo 'Done!';
     }
 
     # no URL given
