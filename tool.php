@@ -120,6 +120,7 @@ class TOOL {
     public static function errText($msg) {
         $text = [];
         $text[] = 'ERROR HAPPENED.';
+        $text[] = "URL: {$_GET['url']}";
         $text[] = "MESSAGE: $msg";
         $text[] = 'CONTACT IGONEJACK@GMAIL.COM IN NECESSARY';
 
