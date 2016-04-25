@@ -7,15 +7,15 @@
  * Time: 00:13
  */
 class PARSER {
-    private static function decodeHTMLChars($str) {
+    private static function _decodeHTMLChars($str) {
         $convertMap = [0x0, 0x2FFFF, 0, 0xFFFF];
 
         return mb_decode_numericentity($str, $convertMap, 'UTF-8');
     }
 
     public static function Answer($JSON) {
-        $Q = static::decodeHtmlChars($JSON['question']);
-        $A   = static::decodeHtmlChars($JSON['answer']);
+        $Q = static::_decodeHTMLChars($JSON['question']);
+        $A   = static::_decodeHTMLChars($JSON['answer']);
         $TAGs     = implode(', ', isset($JSON['tags']) ? $JSON['tags'] : []);
 
         $text   = "[Q&A]\r\n\r\n$Q\r\n\r\n$A\r\n\r\nTags: $TAGs\r\n";
