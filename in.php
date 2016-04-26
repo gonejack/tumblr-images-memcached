@@ -103,11 +103,11 @@ class IN {
 
         @file_get_contents($src, NULL, $CONF);
 
-        return TOOL::readHeader($http_response_header, 'content-length') ?: false;
+        return (int)TOOL::readHeader($http_response_header, 'content-length') ?: false;
     }
 
     private static function _netIMG($url, $limit = null) {
-        $limit = $limit ?: 3 * 1024 * 1024;
+        $limit = $limit ?: 2 * 1024 * 1024;
 
         if (static::_isGIF($url) && static::resLen($url) > $limit) {
             throw new Exception('IMG_OVER_SIZE');
