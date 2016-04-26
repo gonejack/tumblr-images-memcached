@@ -1,4 +1,4 @@
 cron:
 - description: daily clean job
   url: /?clean=lastweek
-  schedule: every 24 hours
+  schedule: every monday 09:00

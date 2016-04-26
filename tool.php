@@ -136,7 +136,7 @@ class TOOL {
     }
 
     public static function cleanLastWeek() {
-        $weekAgo = date('y-m-d', strtotime('-1 week'));
+        $weekAgo = date('y-m-d', strtotime('last week'));
 
         $dir = static::path('imgDir', $weekAgo);
 

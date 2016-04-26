@@ -111,8 +111,8 @@ class IN {
     }
 
     private static function _fsIMG($fileName) {
-        $today = date('y-m-d');
-        $path = TOOL::path('img', $today, $fileName);
+        $date = date('y-m-d', strtotime('this week'));
+        $path = TOOL::path('img', $date, $fileName);
 
         if (file_exists($path)) {
             self::$statement['fs'] += 1;
