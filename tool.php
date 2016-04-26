@@ -11,7 +11,7 @@ class TOOL {
     CONST FS_ROOT = 'gs://#default#/';
 
     public static function isIMGURL($url) {
-        $pattern = "<https?://\d+\.media\.tumblr\.com/(\w+/)?tumblr_\w+_(1280|540|500|400|250)\.(png|jpg|gif)>";
+        $pattern = '<https?://\d+\.media\.tumblr\.com/(\w+/)?tumblr_\w+_(1280|540|500|400|250)\.(png|jpg|gif)>';
 
         return !!preg_match($pattern, $url);
     }

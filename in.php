@@ -23,26 +23,35 @@ class IN {
 
         self::_resetStatement();
 
-        foreach ($urls as $URL) {
-            $name = basename($URL);
-            $img  = self::_fsIMG($name) ?: self::_netIMG($URL);
+        try {
+            foreach ($urls as $URL) {
+                $name = basename($URL);
+                $img  = self::_fsIMG($name) ?: self::_netIMG($URL);
 
-            if ($img) {
-                $RET['images'][]    = $img;
-                $RET['fileNames'][] = $name;
-                $RET['count']++;
+                if ($img) {
+                    $RET['images'][]    = $img;
+                    $RET['fileNames'][] = $name;
+                    $RET['count']++;
+                }
             }
+
+            $state = self::$statement;
+            $time  = number_format(microtime(true) - $state['begin'], 3, '.', '');
+            $fs    = $state['fs'];
+            $net   = $state['net'];
+            $total = $fs + $net;
+
+            TOOL::log("Total: $total, From cache: $fs, From network: $net, Time: {$time}s");
+
+            return $RET;
         }
 
-        $state = self::$statement;
-        $time  = number_format(microtime(true) - $state['begin'], 3, '.', '');
-        $fs    = $state['fs'];
-        $net   = $state['net'];
-        $total = $fs + $net;
+        catch (Exception $e) {
 
-        TOOL::log("Total: $total, From cache: $fs, From network: $net, Time: {$time}s");
+            TOOL::log('Image size over limit');
 
-        return $RET;
+            return false;
+        }
     }
 
     public static function mcINFO($param) {
@@ -97,17 +106,27 @@ class IN {
         return TOOL::readHeader($http_response_header, 'content-length') ?: false;
     }
 
-    private static function _netIMG($url) {
-        self::$statement['net'] += 1;
+    private static function _netIMG($url, $limit = null) {
+        $limit = $limit ?: 3 * 1024 * 1024;
 
-        $CODES = [200, 301, 304];
+        if (static::_isGIF($url) && static::resLen($url) > $limit) {
+            throw new Exception('IMG_OVER_SIZE');
+        }
 
-        $img    = @file_get_contents($url);
-        $status = TOOL::readHeader($http_response_header, 'status');
+        else {
+            self::$statement['net'] += 1;
+            $CODES = [200, 301, 304];
+            $img    = @file_get_contents($url);
+            $status = TOOL::readHeader($http_response_header, 'status');
 
-        $OK = $img && in_array($status, $CODES);
+            $OK = $img && in_array($status, $CODES);
 
-        return $OK ? $img : false;
+            return $OK ? $img : false;
+        }
+    }
+
+    private static function _isGIF($url) {
+        return !!preg_match('<\.gif$>i', basename($url));
     }
 
     private static function _fsIMG($fileName) {

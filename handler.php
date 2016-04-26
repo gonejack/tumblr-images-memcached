@@ -96,9 +96,7 @@ class HANDLER {
 
                         else {
 
-                            if (CONF_PACKIMGS) {
-
-                                $IMGsPack = IN::getIMGs($URLs);
+                            if (CONF_PACKIMGS && $IMGsPack = IN::getIMGs($URLs)) {
                                 $ZIP = TOOL::IMGZip($IMGsPack);
 
                                 OUT::saveIMGs($IMGsPack);
