@@ -145,21 +145,18 @@ class TOOL {
         return true;
     }
 
-    private static function _rmdir($src) {
-        $dir = opendir($src);
-        while (false !== ($file = readdir($dir))) {
-            if (($file != '.') && ($file != '..')) {
-                $full = $src . '/' . $file;
-                if (is_dir($full)) {
-                    static::_rmdir($full);
-                }
-                else {
-                    unlink($full);
-                }
-            }
+    private static function _rmdir($dir) {
+        $list = array_diff(scandir($dir), ['.', '..']);
+
+        foreach ($list as $f) {
+
+            $target = "$dir/$f";
+
+            is_dir($target) ? static::_rmdir($target) : unlink($target);
+
         }
-        closedir($dir);
-        rmdir($src);
+
+        return rmdir($dir);
     }
 
 }

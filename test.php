@@ -24,5 +24,3 @@ $photoUrls = array(
 
 //'' ?: $abc = 100;
 //echo $abc;
-
-echo ucfirst('abcDF');
