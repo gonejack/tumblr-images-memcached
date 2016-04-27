@@ -107,7 +107,7 @@ class IN {
     }
 
     private static function _netIMG($url, $limit = null) {
-        $limit = $limit ?: 2 * 1024 * 1024;
+        $limit = $limit ?: 1 * 1024 * 1024;
 
         if (static::_isGIF($url) && static::resLen($url) > $limit) {
             throw new Exception('IMG_OVER_SIZE');
