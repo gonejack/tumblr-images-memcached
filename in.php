@@ -48,7 +48,7 @@ class IN {
 
         catch (Exception $e) {
 
-            TOOL::log('Image size over limit');
+            TOOL::log('SIZE OVER LIMITATION');
 
             return false;
         }

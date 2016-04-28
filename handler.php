@@ -130,7 +130,7 @@ class HANDLER {
 
                 $INFO['HEAD'] = headers_list();
 
-                OUT::resINFO($param, $INFO);
+                OUT::mcINFO($param, $INFO);
 
             }
         }

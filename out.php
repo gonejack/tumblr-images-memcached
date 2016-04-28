@@ -74,7 +74,7 @@ class OUT {
         return true;
     }
 
-    public static function resINFO($param,$info) {
+    public static function mcINFO($param, $info) {
         $key = TOOL::mcINFOKey($param);
 
         return static::$mc->set($key, $info);
