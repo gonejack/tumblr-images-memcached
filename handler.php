@@ -17,16 +17,17 @@ class HANDLER {
     }
 
     public static function handle($url) {
-
         $param = $INFO = null;
 
         try {
-            $param = TOOL::URLParam($url);
+            $isHEADReq = TOOL::isREQMethod('HEAD');
+
+            $param  = TOOL::URLParam($url);
             $mcINFO = IN::mcINFO($param);
 
             if ($mcINFO) {
                 # it is a HEAD request
-                if (TOOL::isREQMethod('HEAD')) {
+                if ($isHEADReq) {
                     TOOL::log('HEAD Response');
 
                     OUT::headers($mcINFO['HEAD']);
@@ -61,7 +62,7 @@ class HANDLER {
                         $ZIP  = TOOL::HTMLZip($HTML);
                         $INFO = ['CONTENT' => $ZIP, 'TYPE' => 'HTMLZip'];
 
-                        OUT::ZIP($ZIP, TOOL::isREQMethod('HEAD'));
+                        OUT::ZIP($ZIP, $isHEADReq);
                     break;
 
                     case 'video':
@@ -79,7 +80,7 @@ class HANDLER {
                             $ZIP  = TOOL::HTMLZip($HTML);
                             $INFO = ['CONTENT' => $ZIP, 'TYPE' => 'HTMLZip'];
 
-                            OUT::ZIP($ZIP, TOOL::isREQMethod('HEAD'));
+                            OUT::ZIP($ZIP, $isHEADReq);
                         }
                     break;
 
@@ -100,7 +101,7 @@ class HANDLER {
                                 $ZIP = TOOL::IMGZip($IMGsPack);
 
                                 OUT::saveIMGs($IMGsPack);
-                                OUT::ZIP($ZIP, TOOL::isREQMethod('HEAD'));
+                                OUT::ZIP($ZIP, $isHEADReq);
 
                                 $INFO = ['TYPE' => 'PHOTOS'];
                             }
@@ -110,7 +111,7 @@ class HANDLER {
                                 $ZIP = TOOL::HTMLZip($HTML);
                                 $INFO = ['CONTENT' => $ZIP, 'TYPE' => 'HTMLZip'];
 
-                                OUT::ZIP($ZIP, TOOL::isREQMethod('HEAD'));
+                                OUT::ZIP($ZIP, $isHEADReq);
                             }
                         }
                     break;
