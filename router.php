@@ -10,7 +10,7 @@ class Router {
     private static function _CJKChars($url) {
         if (preg_match('<(http.+?tumblr\.com)(.+$)>i', $url, $matches)) {
             $path_parts = array_map('urlencode', explode('/', $matches[2]));
-            $url        = $matches[1] . implode('/', $path_parts);
+            $url = $matches[1] . implode('/', $path_parts);
         }
 
         return $url;
@@ -26,9 +26,8 @@ class Router {
 
         $node    = static::_strHash($url, $numberOfHost);
         $to = "http://tumblr-images-$node.appspot.com/main.php?url={$url}";
-        $to = static::_CJKChars($to);
 
-        OUT::redirect($to);
+        OUT::redirect(static::_CJKChars($to));
     }
 
 }

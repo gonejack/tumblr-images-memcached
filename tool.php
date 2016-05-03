@@ -140,19 +140,19 @@ class TOOL {
 
         $dir = static::path('imgDir', $weekAgo);
 
-        if (is_dir($dir)) static::_rmdir($dir);
+        if (is_dir($dir)) static::_rrmdir($dir);
 
         return true;
     }
 
-    private static function _rmdir($dir) {
+    private static function _rrmdir($dir) {
         $list = array_diff(scandir($dir), ['.', '..']);
 
         foreach ($list as $f) {
 
             $target = "$dir/$f";
 
-            is_dir($target) ? static::_rmdir($target) : unlink($target);
+            is_dir($target) ? static::_rrmdir($target) : unlink($target);
 
         }
 
