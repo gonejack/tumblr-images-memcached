@@ -41,7 +41,7 @@ function main() {
     }
 
     elseif (isset($_GET['clean'])) {
-        TOOL::cleanLastWeek();
+        TOOL::clean('-4 days');
 
         stop('Done!');
     }

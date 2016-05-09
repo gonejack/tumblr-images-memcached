@@ -25,7 +25,8 @@ $photoUrls = array(
 //'' ?: $abc = 100;
 //echo $abc;
 
-echo date('y-m-d', strtotime('monday this week')), "\n";
-echo date('y-m-d', strtotime('monday last week')), "\n";
-echo date('y-m-d', strtotime('this week')), "\n";
-echo date('y-m-d', strtotime('last week')), "\n";
+
+echo date('y-m-d', strtotime('today')), "\n";
+echo date('y-m-d', strtotime('-2 days')), "\n";
+echo date('y-m-d'), "\n";
+echo date('y-m-d', strtotime('yesterday')), "\n";

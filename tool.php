@@ -135,8 +135,8 @@ class TOOL {
         return "{$param['domain']}|{$param['id']}|QuickResponse";
     }
 
-    public static function cleanLastWeek() {
-        $weekAgo = date('y-m-d', strtotime('last week'));
+    public static function clean($dayStr) {
+        $weekAgo = date('y-m-d', strtotime($dayStr));
 
         $dir = static::path('imgDir', $weekAgo);
 

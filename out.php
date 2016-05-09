@@ -51,7 +51,7 @@ class OUT {
     }
 
     public static function saveIMGs(&$pack) {
-        $thisWeek = date('y-m-d', strtotime('this week'));
+        $today = date('y-m-d');
         $len = count($pack['images']);
         $saved = 0;
 
@@ -59,7 +59,7 @@ class OUT {
             $name = $pack['fileNames'][$i];
             $img = $pack['images'][$i];
 
-            $path = Tool::path('img', $thisWeek, $name);
+            $path = Tool::path('img', $today, $name);
             $saved += self::_write($path, $img);
         }
 
