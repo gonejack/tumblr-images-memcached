@@ -136,9 +136,9 @@ class TOOL {
     }
 
     public static function clean($dayStr) {
-        $weekAgo = date('y-m-d', strtotime($dayStr));
+        $cleanDay = date('y-m-d', strtotime($dayStr));
 
-        $dir = static::path('imgDir', $weekAgo);
+        $dir = static::path('imgDir', $cleanDay);
 
         if (is_dir($dir)) static::_rrmdir($dir);
 
