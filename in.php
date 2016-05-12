@@ -130,7 +130,7 @@ class IN {
     }
 
     private static function _fsIMG($fileName) {
-        $date = date('y-m-d', strtotime('this week'));
+        $date = date('y-m-d');
         $path = TOOL::path('img', $date, $fileName);
 
         if (file_exists($path)) {
