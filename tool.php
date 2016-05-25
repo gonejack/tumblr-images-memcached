@@ -50,9 +50,9 @@ class TOOL {
 
         switch ($type) {
             case 'img':
-                return Tool::FS_ROOT ."images/$date/$file";
+                return TOOL::FS_ROOT ."images/$date/$file";
             case 'imgDir':
-                return Tool::FS_ROOT ."images/$date";
+                return TOOL::FS_ROOT ."images/$date";
 
             default:
                 return '';

@@ -59,7 +59,7 @@ class OUT {
             $name = $pack['fileNames'][$i];
             $img = $pack['images'][$i];
 
-            $path = Tool::path('img', $today, $name);
+            $path = TOOL::path('img', $today, $name);
             $saved += self::_write($path, $img);
         }
 

@@ -5,7 +5,7 @@
  * Date: 2015-12-09
  * Time: 21:21
  */
-class Router {
+class ROUTER {
 
     private static function _CJKChars($url) {
         if (preg_match('<(http.+?tumblr\.com)(.+$)>i', $url, $matches)) {

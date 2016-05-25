@@ -107,21 +107,23 @@ class IN {
     }
 
     private static function _netIMG($url, $limit = null) {
-        $limit = $limit ?: 1 * 1024 * 1024;
+        self::$statement['net'] += 1;
 
-        if (static::_isGIF($url) && static::resLen($url) > $limit) {
+        $limit = $limit ?: 1 * 1024 * 1024;
+        $valid = [200, 301, 304];
+
+        $img = @file_get_contents($url);
+        $len = TOOL::readHeader($http_response_header, 'content-length');
+
+        if ($len > $limit) {
             throw new Exception('IMG_OVER_SIZE');
         }
 
         else {
-            self::$statement['net'] += 1;
-            $CODES = [200, 301, 304];
-            $img    = @file_get_contents($url);
             $status = TOOL::readHeader($http_response_header, 'status');
+            $isOk = $img && in_array($status, $valid);
 
-            $OK = $img && in_array($status, $CODES);
-
-            return $OK ? $img : false;
+            return $isOk ? $img : false;
         }
     }
 
