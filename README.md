@@ -12,7 +12,7 @@
   cd tumblr-images-memcached
   nano main.php
   （找到$packImages = false改为$packImages = true，按 CTRL+O 保存，CTRL+X 退出编辑）
-  gcloud preview app deploy ./app.yaml --promote
+  gcloud app deploy ./app.yaml --promote
   ```
 
 5. 好，你的服务器完成。访问一下应用的地址(上面命令输出信息中会告诉你的)试试，如果会输出hello信息，就可以去配置IFTTT了。
@@ -32,7 +32,7 @@ Server being overload all the time, got to cancel the zip packing for multi-imag
   cd tumblr-images-memcached
   nano main.php
   (find $packImages = false, edit it to $packImages = true. CTRL+O to save and CTRL+X to exit, then go ahead typing)
-  gcloud preview app deploy ./app.yaml --promote
+  gcloud app deploy ./app.yaml --promote
   ```
 
 5. Go to the URL that command prompted you, if there something like 'hello' shows up, you are good to go for configuring IFTTT.
